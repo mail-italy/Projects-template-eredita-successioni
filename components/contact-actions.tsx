@@ -1,0 +1,120 @@
+"use client";
+
+import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
+
+import { contacts } from "@/lib/content";
+
+type ContactActionsProps = {
+  scope: string;
+  className?: string;
+  includePhone?: boolean;
+  includeEmail?: boolean;
+  includeWhatsapp?: boolean;
+  compact?: boolean;
+};
+
+function getRomeTimeState(date: Date) {
+  const formatter = new Intl.DateTimeFormat("it-IT", {
+    timeZone: "Europe/Rome",
+    hour: "2-digit",
+    minute: "2-digit",
+    weekday: "short",
+    hour12: false,
+  });
+
+  const parts = formatter.formatToParts(date);
+  const hour = Number(parts.find((part) => part.type === "hour")?.value ?? "0");
+  const minute = Number(parts.find((part) => part.type === "minute")?.value ?? "0");
+  const weekday = parts.find((part) => part.type === "weekday")?.value?.toLowerCase() ?? "";
+  const totalMinutes = hour * 60 + minute;
+  const isWeekday = !weekday.includes("sab") && !weekday.includes("dom");
+
+  return {
+    label: `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`,
+    canCall: isWeekday && totalMinutes >= 540 && totalMinutes <= 1170,
+  };
+}
+
+export function ContactActions({
+  scope,
+  className,
+  includePhone = true,
+  includeEmail = true,
+  includeWhatsapp = true,
+  compact = false,
+}: ContactActionsProps) {
+  const [timeState, setTimeState] = useState(() => getRomeTimeState(new Date()));
+
+  useEffect(() => {
+    const sync = () => setTimeState(getRomeTimeState(new Date()));
+
+    sync();
+    const timer = window.setInterval(sync, 60000);
+
+    return () => window.clearInterval(timer);
+  }, []);
+
+  const wrapperClassName = useMemo(
+    () => [compact ? "contact-actions-compact" : "cluster", className].filter(Boolean).join(" "),
+    [className, compact],
+  );
+
+  return (
+    <div className={wrapperClassName}>
+      {includeWhatsapp ? (
+        <Link
+          href={contacts.whatsappHref}
+          className="button-whatsapp"
+          data-track-event="whatsapp_click"
+          data-track-label={`${scope}_whatsapp`}
+        >
+          WhatsApp
+        </Link>
+      ) : null}
+
+      {includePhone && timeState.canCall ? (
+        <Link
+          href={contacts.phoneHref}
+          className="button-call"
+          data-track-event="phone_click"
+          data-track-label={`${scope}_phone`}
+        >
+          Chiama
+        </Link>
+      ) : null}
+
+      {includeEmail ? (
+        <Link
+          href={contacts.emailHref}
+          className="button-mail"
+          data-track-event="email_click"
+          data-track-label={`${scope}_email`}
+        >
+          Mail
+        </Link>
+      ) : null}
+    </div>
+  );
+}
+
+export function ContactAvailabilityNote() {
+  const [timeState, setTimeState] = useState(() => getRomeTimeState(new Date()));
+
+  useEffect(() => {
+    const sync = () => setTimeState(getRomeTimeState(new Date()));
+
+    sync();
+    const timer = window.setInterval(sync, 60000);
+
+    return () => window.clearInterval(timer);
+  }, []);
+
+  return (
+    <p className="muted">
+      Telefono disponibile dal lunedì al venerdì, dalle 09:00 alle 19:30. Orario
+      attuale a Roma: {timeState.label}. Fuori fascia restano sempre disponibili
+      WhatsApp e Mail.
+    </p>
+  );
+}

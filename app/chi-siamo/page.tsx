@@ -1,0 +1,93 @@
+import Link from "next/link";
+
+import { ContactSection, FaqSection } from "@/components/sections";
+import { JsonLd } from "@/components/json-ld";
+import { aboutPage, thematicFaqs } from "@/lib/content";
+import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
+
+export const metadata = buildMetadata({
+  title: "Chi siamo",
+  description:
+    "Esperienza ultraventennale dello Studio Legale Del Monte in successioni, eredità, testamenti e divisioni ereditarie.",
+  path: "/chi-siamo",
+});
+
+export default function AboutPage() {
+  return (
+    <>
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: "Homepage", path: "/" },
+          { name: "Chi siamo", path: "/chi-siamo" },
+        ])}
+      />
+      <section className="section">
+        <div className="shell hero-grid">
+          <div className="stack">
+            <nav className="breadcrumbs" aria-label="Breadcrumb">
+              <Link href="/">Home</Link>
+              <span>/</span>
+              <span>Chi siamo</span>
+            </nav>
+            <p className="eyebrow">Chi siamo</p>
+            <h1 className="display">Esperienza, rigore tecnico e attenzione al caso concreto</h1>
+            <p className="lead">{aboutPage.intro}</p>
+          </div>
+          <div className="panel">
+            <div className="panel-inner stack">
+              <h2>Perché questa pagina conta per trust ed E-E-A-T</h2>
+              <p className="muted">
+                Lo studio segue da oltre vent’anni pratiche successorie e patrimoniali,
+                con particolare attenzione alle vicende in cui la componente familiare e
+                documentale incide in modo decisivo sull’esito della pratica.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="section-tight">
+        <div className="shell three-column">
+          {aboutPage.highlights.map((item) => (
+            <div key={item} className="card">
+              <h3>{item}</h3>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="section-tight">
+        <div className="shell meta-grid">
+          <div className="mini-card">
+            <h3>Esperienza</h3>
+            <p>Attività continuativa nelle successioni, nei testamenti e nei conflitti tra coeredi.</p>
+          </div>
+          <div className="mini-card">
+            <h3>Focus professionale</h3>
+            <p>Successioni, testamenti, legittima, divisioni ereditarie, patrimoni complessi e profili internazionali.</p>
+          </div>
+          <div className="mini-card">
+            <h3>Approccio</h3>
+            <p>Metodo orientato a chiarezza, prova, tutela della posizione del cliente e ricerca di soluzioni efficaci.</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="shell two-column">
+          {aboutPage.narrative.map((paragraph) => (
+            <div key={paragraph} className="card">
+              <p className="lead">{paragraph}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <FaqSection title="Domande ricorrenti sullo studio" items={thematicFaqs} />
+      <ContactSection
+        title="Contatta lo studio"
+        intro="Se vuoi capire come impostare una successione, una divisione o un contenzioso ereditario, qui trovi i riferimenti dello Studio Legale Del Monte in un unico blocco ordinato."
+      />
+    </>
+  );
+}

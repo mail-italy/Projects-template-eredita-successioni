@@ -1,0 +1,81 @@
+import Link from "next/link";
+
+import { ContactSection } from "@/components/sections";
+import { JsonLd } from "@/components/json-ld";
+import { contacts } from "@/lib/content";
+import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
+
+export const metadata = buildMetadata({
+  title: "Contatti",
+  description:
+    "Contatti dello Studio Legale Del Monte per successioni, eredità, testamenti e divisioni ereditarie.",
+  path: "/contatti",
+});
+
+export default function ContactsPage() {
+  return (
+    <>
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: "Homepage", path: "/" },
+          { name: "Contatti", path: "/contatti" },
+        ])}
+      />
+      <section className="section">
+        <div className="shell hero-grid">
+          <div className="stack">
+            <nav className="breadcrumbs" aria-label="Breadcrumb">
+              <Link href="/">Home</Link>
+              <span>/</span>
+              <span>Contatti</span>
+            </nav>
+            <p className="eyebrow">Contatti</p>
+            <h1 className="display">Contatta lo studio</h1>
+            <p className="lead">
+              Se hai bisogno di assistenza in materia di successioni, eredità,
+              testamenti o divisioni ereditarie, puoi contattare lo studio tramite
+              telefono, WhatsApp, Mail o modulo di richiesta.
+            </p>
+          </div>
+          <div className="panel">
+            <div className="panel-inner stack">
+              <div className="contact-item">
+                <strong>Telefono</strong>
+                <div className="muted">{contacts.phoneDisplay}</div>
+              </div>
+              <div className="contact-item">
+                <strong>WhatsApp</strong>
+                <div className="muted">{contacts.whatsappHref}</div>
+              </div>
+              <div className="contact-item">
+                <strong>Email</strong>
+                <div className="muted">{contacts.email}</div>
+              </div>
+              <div className="contact-item">
+                <strong>Indirizzo</strong>
+                <div className="muted">{contacts.address}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="section-tight">
+        <div className="shell meta-grid">
+          <div className="mini-card">
+            <h3>Canali disponibili</h3>
+            <p>Telefono, WhatsApp, Mail e modulo di contatto con possibilità di allegare documenti.</p>
+          </div>
+          <div className="mini-card">
+            <h3>Orari del telefono</h3>
+            <p>Il pulsante Chiama è disponibile dalle 09:00 alle 19:30. WhatsApp e Mail restano sempre attivi.</p>
+          </div>
+          <div className="mini-card">
+            <h3>Sede</h3>
+            <p>Studio a Roma, con assistenza su questioni successorie che richiedono coordinamento anche oltre il contesto locale.</p>
+          </div>
+        </div>
+      </section>
+      <ContactSection />
+    </>
+  );
+}

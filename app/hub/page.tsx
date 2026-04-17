@@ -1,0 +1,46 @@
+import { ContactSection, HubGrid } from "@/components/sections";
+import { JsonLd } from "@/components/json-ld";
+import { hubPages, siteConfig } from "@/lib/content";
+import { breadcrumbSchema, buildMetadata, itemListSchema } from "@/lib/seo";
+
+export const metadata = buildMetadata({
+  title: "Aree di approfondimento",
+  description:
+    "Aree di approfondimento su testamento, legittima, divisione ereditaria, donazioni, successione legittima, successioni internazionali e conflitti tra coeredi.",
+  path: "/hub",
+});
+
+export default function HubArchivePage() {
+  return (
+    <>
+      <JsonLd
+        data={[
+          breadcrumbSchema([
+            { name: "Homepage", path: "/" },
+            { name: "Aree di approfondimento", path: "/hub" },
+          ]),
+          itemListSchema(
+            "Aree di approfondimento sul diritto successorio",
+            hubPages.map((page) => ({
+              name: page.title,
+              url: `${siteConfig.domain}/hub/${page.slug}`,
+            })),
+          ),
+        ]}
+      />
+      <section className="section">
+        <div className="shell stack">
+          <p className="eyebrow">Aree di approfondimento</p>
+          <h1 className="display">Temi principali del diritto ereditario</h1>
+          <p className="lead">
+            Una raccolta ordinata dei temi che ricorrono più spesso nelle pratiche
+            successorie: testamenti, legittima, divisioni, donazioni, successione
+            legittima, profili internazionali e conflitti tra coeredi.
+          </p>
+        </div>
+      </section>
+      <HubGrid hubs={hubPages} />
+      <ContactSection />
+    </>
+  );
+}
