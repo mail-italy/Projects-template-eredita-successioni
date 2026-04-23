@@ -1,5 +1,7 @@
 import type { NextConfig } from "next";
 
+const isDev = process.env.NODE_ENV === "development";
+
 const connectSources = [
   "'self'",
   "https://www.googletagmanager.com",
@@ -10,12 +12,15 @@ const connectSources = [
 ];
 
 const imageSources = ["'self'", "data:", "blob:"];
+
 const scriptSources = [
   "'self'",
   "'unsafe-inline'",
+  ...(isDev ? ["'unsafe-eval'"] : []),
   "https://www.googletagmanager.com",
   "https://www.google-analytics.com",
 ];
+
 const styleSources = ["'self'", "'unsafe-inline'"];
 const frameSources = ["'self'", "https://www.google.com"];
 
@@ -42,22 +47,10 @@ const nextConfig: NextConfig = {
       {
         source: "/(.*)",
         headers: [
-          {
-            key: "Content-Security-Policy",
-            value: contentSecurityPolicy,
-          },
-          {
-            key: "Referrer-Policy",
-            value: "strict-origin-when-cross-origin",
-          },
-          {
-            key: "X-Content-Type-Options",
-            value: "nosniff",
-          },
-          {
-            key: "X-Frame-Options",
-            value: "SAMEORIGIN",
-          },
+          { key: "Content-Security-Policy", value: contentSecurityPolicy },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
         ],
       },
     ];

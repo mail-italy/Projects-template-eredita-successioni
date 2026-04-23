@@ -84,12 +84,6 @@ export type GlossaryTerm = {
   relatedSlugs: string[];
 };
 
-export type LinkItem = {
-  href: string;
-  label: string;
-  description: string;
-};
-
 export const trustSignals = [
   "Competenza dedicata a successioni, testamenti, legittima e divisioni",
   "Esperienza ultraventennale dello Studio Legale Del Monte",
@@ -1255,49 +1249,6 @@ export const thematicFaqs: FaqItem[] = [
       "Sì. Le successioni internazionali richiedono un inquadramento iniziale particolarmente accurato su legge applicabile, documenti e coordinamento degli attori coinvolti.",
   },
 ];
-
-export function getServiceLinks(service: ServicePage): LinkItem[] {
-  return [
-    {
-      href: "/contatti",
-      label: "Contatta lo studio",
-      description: "Richiesta di inquadramento del caso con telefono, WhatsApp, email e form.",
-    },
-    ...service.relatedArticles.map((slug) => {
-      const article = getArticle(slug);
-
-      return {
-        href: `/approfondimenti/${slug}`,
-        label: article?.title ?? slug,
-        description:
-          "Approfondimento editoriale collegato a questa area, utile per chiarire il nodo prima dell’azione.",
-      };
-    }),
-  ];
-}
-
-export function getServiceSearchThemes(service: ServicePage) {
-  return [
-    service.shortTitle.toLowerCase(),
-    `${service.shortTitle.toLowerCase()} roma`,
-    `${service.shortTitle.toLowerCase()} assistenza`,
-    `${service.slug.replaceAll("-", " ")}`,
-    `${service.slug.replaceAll("-", " ")} avvocato`,
-  ];
-}
-
-export function getServiceEntities(service: ServicePage) {
-  const base = [
-    "successione",
-    "eredità",
-    "coeredi",
-    "asse ereditario",
-    "testamento",
-    "documentazione successoria",
-  ];
-
-  return Array.from(new Set([...base, ...service.shortTitle.toLowerCase().split(" ")]));
-}
 
 export function getArticleEntities(article: ArticleEntry) {
   return Array.from(

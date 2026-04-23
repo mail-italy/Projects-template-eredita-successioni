@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import { ContactSection, FaqSection } from "@/components/sections";
@@ -33,15 +34,16 @@ export default function AboutPage() {
             <h1 className="display">Esperienza, rigore tecnico e attenzione al caso concreto</h1>
             <p className="lead">{aboutPage.intro}</p>
           </div>
-          <div className="panel">
-            <div className="panel-inner stack">
-              <h2>Perché questa pagina conta per trust ed E-E-A-T</h2>
-              <p className="muted">
-                Lo studio segue da oltre vent’anni pratiche successorie e patrimoniali,
-                con particolare attenzione alle vicende in cui la componente familiare e
-                documentale incide in modo decisivo sull’esito della pratica.
-              </p>
-            </div>
+          <div className="editorial-figure editorial-figure-wide">
+            <Image
+              src="/images/studio/avvocato-federica-del-monte-ritratto-scrivania.png"
+              alt="Avvocato Federica Del Monte nel proprio studio"
+              fill
+              priority
+              sizes="(max-width: 980px) 100vw, 50vw"
+              className="editorial-image"
+              style={{ objectPosition: "center 24%" }}
+            />
           </div>
         </div>
       </section>

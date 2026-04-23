@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import { ContactSection } from "@/components/sections";
@@ -36,24 +37,40 @@ export default function ContactsPage() {
               testamenti o divisioni ereditarie, puoi contattare lo studio tramite
               telefono, WhatsApp, Mail o modulo di richiesta.
             </p>
+            <Link href="#modulo-contatti" className="button-primary">
+              Vai al modulo di richiesta
+            </Link>
           </div>
-          <div className="panel">
-            <div className="panel-inner stack">
-              <div className="contact-item">
-                <strong>Telefono</strong>
-                <div className="muted">{contacts.phoneDisplay}</div>
-              </div>
-              <div className="contact-item">
-                <strong>WhatsApp</strong>
-                <div className="muted">{contacts.whatsappHref}</div>
-              </div>
-              <div className="contact-item">
-                <strong>Email</strong>
-                <div className="muted">{contacts.email}</div>
-              </div>
-              <div className="contact-item">
-                <strong>Indirizzo</strong>
-                <div className="muted">{contacts.address}</div>
+          <div className="hero-side-stack">
+            <div className="editorial-figure editorial-figure-wide">
+              <Image
+                src="/images/studio/avvocato-federica-del-monte-consulenza-cliente.png"
+                alt="Consulenza nello studio legale Del Monte"
+                fill
+                priority
+                sizes="(max-width: 980px) 100vw, 50vw"
+                className="editorial-image"
+                style={{ objectPosition: "center 26%" }}
+              />
+            </div>
+            <div className="panel">
+              <div className="panel-inner stack">
+                <div className="contact-item">
+                  <strong>Telefono</strong>
+                  <div className="muted">{contacts.phoneDisplay}</div>
+                </div>
+                <div className="contact-item">
+                  <strong>WhatsApp</strong>
+                  <div className="muted">{contacts.whatsappHref}</div>
+                </div>
+                <div className="contact-item">
+                  <strong>Email</strong>
+                  <div className="muted">{contacts.email}</div>
+                </div>
+                <div className="contact-item">
+                  <strong>Indirizzo</strong>
+                  <div className="muted">{contacts.address}</div>
+                </div>
               </div>
             </div>
           </div>

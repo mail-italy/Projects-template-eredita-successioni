@@ -15,8 +15,6 @@ import {
   getArticleEntities,
   getArticleQuestions,
   getHubEntities,
-  getServiceEntities,
-  getServiceLinks,
 } from "@/lib/content";
 import { ContactActions, ContactAvailabilityNote } from "@/components/contact-actions";
 import { ContactForm } from "@/components/contact-form";
@@ -47,6 +45,351 @@ function TrackLink({
   );
 }
 
+const topicLinks: Record<string, string> = {
+  "testamenti": "/hub/testamento",
+  "testamento": "/hub/testamento",
+  "divisioni ereditarie": "/divisione-ereditaria",
+  "divisione ereditaria": "/divisione-ereditaria",
+  "lesione di legittima": "/lesione-di-legittima",
+  "legittima": "/hub/legittima",
+  "donazioni": "/hub/donazioni",
+  "collazione e donazioni": "/collazione-e-donazioni",
+  "successioni internazionali": "/successioni-internazionali",
+  "successione legittima": "/hub/successione-legittima",
+  "conflitti tra coeredi": "/hub/conflitti-tra-coeredi",
+  "impugnazione testamento": "/impugnazione-testamento",
+  "impugnazione del testamento": "/impugnazione-testamento",
+  "mediazione ereditaria": "/mediazione-ereditaria",
+  "eredità giacente": "/eredita-giacente",
+  "rinuncia eredità": "/rinuncia-eredita",
+  "rinuncia all’eredità": "/rinuncia-eredita",
+  "recupero somme ereditarie": "/recupero-somme-ereditarie",
+  "conti correnti e somme del de cuius": "/recupero-somme-ereditarie",
+};
+
+function getTopicHref(label: string) {
+  const normalized = label.toLowerCase().replace(/\s+/g, " ").trim();
+  const direct = topicLinks[normalized];
+
+  if (direct) {
+    return direct;
+  }
+
+  if (normalized.includes("testamento")) return "/impugnazione-testamento";
+  if (normalized.includes("division")) return "/divisione-ereditaria";
+  if (normalized.includes("legittima")) return "/lesione-di-legittima";
+  if (normalized.includes("donazion")) return "/collazione-e-donazioni";
+  if (normalized.includes("internazional")) return "/successioni-internazionali";
+  if (normalized.includes("mediazione")) return "/mediazione-ereditaria";
+  if (normalized.includes("giacente")) return "/eredita-giacente";
+  if (normalized.includes("rinuncia")) return "/rinuncia-eredita";
+  if (normalized.includes("somme") || normalized.includes("conti correnti")) {
+    return "/recupero-somme-ereditarie";
+  }
+
+  return null;
+}
+
+function TopicListItem({
+  item,
+  label,
+}: {
+  item: string;
+  label: string;
+}) {
+  const href = getTopicHref(item);
+
+  return (
+    <li>
+      {href ? (
+        <TrackLink href={href} label={label} className="inline-link">
+          {item}
+        </TrackLink>
+      ) : (
+        item
+      )}
+    </li>
+  );
+}
+
+type VisualAsset = {
+  src: string;
+  alt: string;
+  objectPosition?: string;
+  figureClassName?: string;
+  priority?: boolean;
+  sizes?: string;
+};
+
+function EditorialFigure({
+  asset,
+  className = "",
+}: {
+  asset: VisualAsset;
+  className?: string;
+}) {
+  return (
+    <div className={["editorial-figure", asset.figureClassName ?? "editorial-figure-wide", className].filter(Boolean).join(" ")}>
+      <Image
+        src={asset.src}
+        alt={asset.alt}
+        fill
+        priority={asset.priority}
+        sizes={asset.sizes ?? "(max-width: 980px) 100vw, 50vw"}
+        className="editorial-image"
+        style={{ objectPosition: asset.objectPosition ?? "center center" }}
+      />
+    </div>
+  );
+}
+
+function getServiceVisual(service: ServicePage): VisualAsset {
+  const base = {
+    priority: true,
+    sizes: "(max-width: 980px) 100vw, 46vw",
+  };
+
+  switch (service.slug) {
+    case "avvocato-successioni":
+      return {
+        ...base,
+        src: "/images/studio/avvocato-federica-del-monte-ritratto-ufficio.png",
+        alt: "Ritratto professionale dell'avvocato Federica Del Monte in studio",
+        objectPosition: "center 24%",
+        figureClassName: "editorial-figure-wide",
+      };
+    case "impugnazione-testamento":
+      return {
+        ...base,
+        src: "/images/dettagli/testamento-penna-ceralacca.png",
+        alt: "Documento testamentario con penna e sigillo",
+        objectPosition: "center center",
+        figureClassName: "editorial-figure-standard",
+      };
+    case "divisione-ereditaria":
+      return {
+        ...base,
+        src: "/images/dettagli/avvocato-firma-documento.png",
+        alt: "Firma di un documento legale in studio",
+        objectPosition: "center center",
+        figureClassName: "editorial-figure-standard",
+      };
+    case "lesione-di-legittima":
+      return {
+        ...base,
+        src: "/images/dettagli/codici-civile-successioni-ereditarie.png",
+        alt: "Codici civili e volumi sulle successioni ereditarie",
+        objectPosition: "center center",
+        figureClassName: "editorial-figure-standard",
+      };
+    case "collazione-e-donazioni":
+      return {
+        ...base,
+        src: "/images/dettagli/avvocato-sfoglia-codice-civile.png",
+        alt: "Consultazione di un codice civile in studio legale",
+        objectPosition: "center center",
+        figureClassName: "editorial-figure-standard",
+      };
+    case "successioni-internazionali":
+      return {
+        ...base,
+        src: "/images/dettagli/libreria-legale-globo.png",
+        alt: "Globo e volumi giuridici per successioni con elementi internazionali",
+        objectPosition: "center center",
+        figureClassName: "editorial-figure-standard",
+      };
+    case "mediazione-ereditaria":
+      return {
+        ...base,
+        src: "/images/studio/avvocato-federica-del-monte-consulenza-cliente.png",
+        alt: "Consulenza legale con cliente nello studio",
+        objectPosition: "center 26%",
+        figureClassName: "editorial-figure-wide",
+      };
+    case "eredita-giacente":
+      return {
+        ...base,
+        src: "/images/dettagli/studio-legale-scrivania-penna-occhiali.png",
+        alt: "Scrivania legale con penna, documento e occhiali",
+        objectPosition: "center center",
+        figureClassName: "editorial-figure-standard",
+      };
+    case "rinuncia-eredita":
+      return {
+        ...base,
+        src: "/images/dettagli/scrivania-legale-penna-occhiali-tazza.png",
+        alt: "Scrivania dello studio con penna, documento, occhiali e tazza",
+        objectPosition: "center center",
+        figureClassName: "editorial-figure-standard",
+      };
+    case "recupero-somme-ereditarie":
+      return {
+        ...base,
+        src: "/images/studio/avvocato-federica-del-monte-ritratto-libreria.png",
+        alt: "Ritratto dell'avvocato nello studio davanti alla libreria legale",
+        objectPosition: "center 18%",
+        figureClassName: "editorial-figure-standard",
+      };
+    default:
+      return {
+        ...base,
+        src: "/images/studio/avvocato-federica-del-monte-ritratto-scrivania.png",
+        alt: "Ritratto istituzionale dell'avvocato in studio",
+        objectPosition: "center 24%",
+        figureClassName: "editorial-figure-wide",
+      };
+  }
+}
+
+function getHubVisual(hub: HubPage): VisualAsset {
+  const base = {
+    priority: true,
+    sizes: "(max-width: 980px) 100vw, 46vw",
+  };
+
+  switch (hub.slug) {
+    case "testamento":
+      return {
+        ...base,
+        src: "/images/dettagli/testamento-penna-ceralacca.png",
+        alt: "Testamento con penna e sigillo",
+        figureClassName: "editorial-figure-standard",
+      };
+    case "legittima":
+      return {
+        ...base,
+        src: "/images/dettagli/codici-civile-successioni-ereditarie.png",
+        alt: "Codici civili e testi sulle successioni ereditarie",
+        figureClassName: "editorial-figure-standard",
+      };
+    case "divisione-ereditaria":
+      return {
+        ...base,
+        src: "/images/dettagli/avvocato-firma-documento.png",
+        alt: "Preparazione e firma di documento legale",
+        figureClassName: "editorial-figure-standard",
+      };
+    case "donazioni":
+      return {
+        ...base,
+        src: "/images/dettagli/avvocato-sfoglia-codice-civile.png",
+        alt: "Consultazione di un volume giuridico in studio",
+        figureClassName: "editorial-figure-standard",
+      };
+    case "successione-legittima":
+      return {
+        ...base,
+        src: "/images/dettagli/codici-civile-successioni-ereditarie.png",
+        alt: "Volumi giuridici su diritto civile e successioni",
+        figureClassName: "editorial-figure-standard",
+      };
+    case "successioni-internazionali":
+      return {
+        ...base,
+        src: "/images/dettagli/libreria-legale-globo.png",
+        alt: "Globo e libreria legale per pratiche con elementi esteri",
+        figureClassName: "editorial-figure-standard",
+      };
+    case "conflitti-tra-coeredi":
+      return {
+        ...base,
+        src: "/images/studio/avvocato-federica-del-monte-consulenza-cliente.png",
+        alt: "Colloquio legale in studio su una questione ereditaria",
+        objectPosition: "center 26%",
+        figureClassName: "editorial-figure-wide",
+      };
+    default:
+      return {
+        ...base,
+        src: "/images/studio/avvocato-federica-del-monte-ritratto-libreria.png",
+        alt: "Ritratto istituzionale in studio legale",
+        objectPosition: "center 18%",
+        figureClassName: "editorial-figure-standard",
+      };
+  }
+}
+
+function getArticleVisual(article: ArticleEntry): VisualAsset {
+  const base = {
+    priority: true,
+    sizes: "(max-width: 980px) 100vw, 46vw",
+  };
+
+  if (article.slug.includes("testamento")) {
+    return {
+      ...base,
+      src: "/images/dettagli/testamento-penna-ceralacca.png",
+      alt: "Testamento con penna e sigillo",
+      figureClassName: "editorial-figure-standard",
+    };
+  }
+
+  if (article.slug.includes("successioni-internazionali")) {
+    return {
+      ...base,
+      src: "/images/dettagli/libreria-legale-globo.png",
+      alt: "Dettaglio di libreria legale con globo",
+      figureClassName: "editorial-figure-standard",
+    };
+  }
+
+  if (article.slug.includes("mediazione")) {
+    return {
+      ...base,
+      src: "/images/studio/avvocato-federica-del-monte-consulenza-cliente.png",
+      alt: "Consulenza in studio su pratica ereditaria",
+      objectPosition: "center 26%",
+      figureClassName: "editorial-figure-wide",
+    };
+  }
+
+  if (
+    article.slug.includes("legittima") ||
+    article.slug.includes("successione-legittima")
+  ) {
+    return {
+      ...base,
+      src: "/images/dettagli/codici-civile-successioni-ereditarie.png",
+      alt: "Volumi giuridici su diritto civile e successioni",
+      figureClassName: "editorial-figure-standard",
+    };
+  }
+
+  if (article.slug.includes("conti-correnti")) {
+    return {
+      ...base,
+      src: "/images/dettagli/studio-legale-scrivania-penna-occhiali.png",
+      alt: "Scrivania di studio con documento, penna e occhiali",
+      figureClassName: "editorial-figure-standard",
+    };
+  }
+
+  if (article.slug.includes("rinuncia") || article.slug.includes("giacente")) {
+    return {
+      ...base,
+      src: "/images/dettagli/scrivania-legale-penna-occhiali-tazza.png",
+      alt: "Dettaglio di scrivania legale con documenti e penna",
+      figureClassName: "editorial-figure-standard",
+    };
+  }
+
+  if (article.slug.includes("divisione")) {
+    return {
+      ...base,
+      src: "/images/dettagli/avvocato-firma-documento.png",
+      alt: "Firma di documento in contesto legale",
+      figureClassName: "editorial-figure-standard",
+    };
+  }
+
+  return {
+    ...base,
+    src: "/images/dettagli/avvocato-sfoglia-codice-civile.png",
+    alt: "Consultazione di un codice civile in studio",
+    figureClassName: "editorial-figure-standard",
+  };
+}
+
 export function HeroSection() {
   const thematicTags = [
     "Testamenti",
@@ -68,7 +411,7 @@ export function HeroSection() {
                 width={1086}
                 height={1448}
                 priority
-                sizes="(max-width: 760px) 100vw, (max-width: 1440px) 86vw, 1100px"
+                sizes="(max-width: 760px) 100vw, (max-width: 1440px) 100vw, 1380px"
                 className="hero-portrait"
               />
             </div>
@@ -88,14 +431,19 @@ export function HeroSection() {
 
                 <div className="tag-list hero-tags">
                   {thematicTags.map((tag) => (
-                    <span key={tag} className="tag hero-tag hero-tag-light">
+                    <TrackLink
+                      key={tag}
+                      href={getTopicHref(tag) ?? "/servizi"}
+                      label={`hero_topic_${tag}`}
+                      className="tag hero-tag hero-tag-light"
+                    >
                       {tag}
-                    </span>
+                    </TrackLink>
                   ))}
                 </div>
 
                 <div className="hero-cta-row">
-                  <TrackLink href="/contatti" label="hero_contact" className="button-primary">
+                  <TrackLink href="/contatti#modulo-contatti" label="hero_contact" className="button-primary">
                     Richiedi una valutazione preliminare
                   </TrackLink>
                   <ContactActions scope="hero" includeEmail includePhone includeWhatsapp compact />
@@ -121,14 +469,19 @@ export function HeroSection() {
 
               <div className="tag-list hero-tags">
                 {thematicTags.map((tag) => (
-                  <span key={tag} className="tag hero-tag">
+                  <TrackLink
+                    key={tag}
+                    href={getTopicHref(tag) ?? "/servizi"}
+                    label={`hero_mobile_topic_${tag}`}
+                    className="tag hero-tag"
+                  >
                     {tag}
-                  </span>
+                  </TrackLink>
                 ))}
               </div>
 
               <div className="hero-cta-row">
-                <TrackLink href="/contatti" label="hero_contact_mobile" className="button-primary">
+                <TrackLink href="/contatti#modulo-contatti" label="hero_contact_mobile" className="button-primary">
                   Richiedi una valutazione preliminare
                 </TrackLink>
                 <ContactActions scope="hero_mobile" includeEmail includePhone includeWhatsapp compact />
@@ -163,10 +516,26 @@ export function HomeAuthoritySection() {
           <p className="lead">
             Successioni, testamenti, quote di legittima, divisioni patrimoniali e
             contenziosi tra coeredi richiedono ordine documentale, lettura tecnica e
-            una strategia coerente. La homepage ora accompagna il visitatore in questo
-            percorso con priorità visive più nette e sezioni meglio scandite.
+            una strategia coerente. Il percorso del sito aiuta a distinguere le aree
+            di assistenza e a capire quando chiedere una valutazione legale.
           </p>
         </div>
+      </div>
+    </section>
+  );
+}
+
+export function HomeVideoSection() {
+  return (
+    <section className="section-tight home-video-section" aria-label="Studio legale">
+      <div className="shell home-video-shell">
+        <video
+          className="home-video"
+          src="/video/hero-studio-legale.mp4"
+          controls
+          poster="/images/hero-successioni-del-monte.png"
+          preload="metadata"
+        />
       </div>
     </section>
   );
@@ -188,11 +557,19 @@ export function ProblemsSection({ items = mainProblems }: { items?: string[] }) 
           </p>
         </div>
         <div className="cards-grid">
-          {items.map((item) => (
-            <div key={item} className="card">
+          {items.map((item) => {
+            const href = getTopicHref(item);
+
+            return href ? (
+              <Link key={item} href={href} className="card clickable-card">
+                <h3>{item}</h3>
+              </Link>
+            ) : (
+              <div key={item} className="card">
               <h3>{item}</h3>
-            </div>
-          ))}
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
@@ -230,17 +607,19 @@ export function ServiceGrid({ services }: { services: ServicePage[] }) {
         </div>
         <div className="cards-grid">
           {services.map((service) => (
-            <div key={service.slug} className="card stack">
+            <Link
+              key={service.slug}
+              href={`/${service.slug}`}
+              className="card stack clickable-card"
+              data-track-event="cta_click"
+              data-track-label={`service_${service.slug}`}
+            >
               <h3>{service.title}</h3>
               <p className="muted">{service.description}</p>
-              <TrackLink
-                href={`/${service.slug}`}
-                label={`service_${service.slug}`}
-                className="button-ghost"
-              >
+              <span className="button-ghost card-link-cta">
                 Approfondisci
-              </TrackLink>
-            </div>
+              </span>
+            </Link>
           ))}
         </div>
       </div>
@@ -262,17 +641,19 @@ export function HubGrid({ hubs }: { hubs: HubPage[] }) {
         </div>
         <div className="cards-grid">
           {hubs.map((hub) => (
-            <div key={hub.slug} className="card stack">
+            <Link
+              key={hub.slug}
+              href={`/hub/${hub.slug}`}
+              className="card stack clickable-card"
+              data-track-event="cta_click"
+              data-track-label={`hub_${hub.slug}`}
+            >
               <h3>{hub.title}</h3>
               <p className="muted">{hub.description}</p>
-              <TrackLink
-                href={`/hub/${hub.slug}`}
-                label={`hub_${hub.slug}`}
-                className="button-ghost"
-              >
+              <span className="button-ghost card-link-cta">
                 Vai alla sezione
-              </TrackLink>
-            </div>
+              </span>
+            </Link>
           ))}
         </div>
       </div>
@@ -298,18 +679,20 @@ export function ArticleGrid({
         </div>
         <div className="cards-grid">
           {articles.map((article) => (
-            <article key={article.slug} className="card stack">
+            <Link
+              key={article.slug}
+              href={`/approfondimenti/${article.slug}`}
+              className="card stack clickable-card"
+              data-track-event="cta_click"
+              data-track-label={`article_${article.slug}`}
+            >
               <p className="eyebrow">{article.category}</p>
               <h3>{article.title}</h3>
               <p className="muted">{article.excerpt}</p>
-              <TrackLink
-                href={`/approfondimenti/${article.slug}`}
-                label={`article_${article.slug}`}
-                className="button-ghost"
-              >
+              <span className="button-ghost card-link-cta">
                 Leggi l’articolo
-              </TrackLink>
-            </article>
+              </span>
+            </Link>
           ))}
         </div>
       </div>
@@ -357,7 +740,7 @@ export function ContactSection({
 }) {
   return (
     <>
-      <section className="section">
+      <section className="section" id="modulo-contatti">
         <div className="shell panel">
           <div className="panel-inner contact-grid">
             <div className="stack">
@@ -409,6 +792,8 @@ export function ServicePageTemplate({
   service: ServicePage;
   relatedArticles: ArticleEntry[];
 }) {
+  const serviceVisual = getServiceVisual(service);
+
   return (
     <>
       <section className="section">
@@ -425,99 +810,53 @@ export function ServicePageTemplate({
             <h1 className="display">{service.heroTitle}</h1>
             <p className="lead">{service.heroIntro}</p>
             <div className="cluster">
-              <TrackLink href="/contatti" label={`${service.slug}_hero_contact`}>
-                Richiedi assistenza
+              <TrackLink href="/contatti#modulo-contatti" label={`${service.slug}_hero_contact`}>
+                Richiedi una valutazione
               </TrackLink>
               <ContactActions scope={`${service.slug}_hero`} compact />
             </div>
           </div>
-          <div className="panel">
-            <div className="panel-inner stack">
-              <h2>Quando può essere utile un confronto con lo studio</h2>
-              <ul className="list">
-                {service.whenToCall.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="section-tight">
-        <div className="shell meta-grid">
-          <div className="mini-card">
-            <h3>In breve</h3>
-            <p>{service.description}</p>
-          </div>
-          <div className="mini-card">
-            <h3>Assistenza su misura</h3>
-            <p>
-              Ogni pratica viene valutata in base a documenti, asset patrimoniali,
-              rapporti tra coeredi e obiettivi concreti.
-            </p>
-          </div>
-          <div className="mini-card">
-            <h3>Ambito di attività</h3>
-            <p>
-              Studio con sede a Roma, attivo anche su questioni successorie che
-              richiedono coordinamento documentale o giudiziale più ampio.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section className="section-tight">
-        <div className="shell cards-grid">
-          <div className="card">
-            <h3>Problemi trattati</h3>
-            <ul className="list">
-              {service.problemList.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </div>
-          <div className="card">
-            <h3>Verifiche preliminari</h3>
-            <ul className="list">
-              {service.checks.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </div>
-          <div className="card">
-            <h3>Errori da evitare</h3>
-            <ul className="list">
-              {service.errors.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </div>
-          <div className="card">
-            <h3>Documenti utili</h3>
-            <ul className="list">
-              {service.documents.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </div>
+          <EditorialFigure asset={serviceVisual} className="service-hero-visual" />
         </div>
       </section>
 
       <section className="section-tight">
         <div className="shell two-column">
           <div className="card stack">
-            <h3>Temi collegati</h3>
-            <div className="tag-list">
-              {getServiceEntities(service).map((item) => (
-                <span key={item} className="tag">
-                  {item}
-                </span>
+            <p className="eyebrow">Problema</p>
+            <h2>Quando questa materia diventa delicata</h2>
+            <p className="muted">{service.description}</p>
+            <ul className="list">
+              {service.problemList.map((item) => (
+                <TopicListItem
+                  key={item}
+                  item={item}
+                  label={`${service.slug}_problem_${item}`}
+                />
               ))}
-            </div>
+            </ul>
           </div>
           <div className="card stack">
-            <h3>Come affrontiamo la pratica</h3>
+            <p className="eyebrow">Verifica legale</p>
+            <h2>Cosa controlla lo studio</h2>
+            <ul className="list">
+              {service.checks.map((item) => (
+                <TopicListItem
+                  key={item}
+                  item={item}
+                  label={`${service.slug}_check_${item}`}
+                />
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="shell two-column">
+          <div className="card stack">
+            <p className="eyebrow">Metodo</p>
+            <h2 className="display-sm">Come interviene lo studio</h2>
             <div className="info-list">
               <div className="info-item">
                 <strong>Analisi documentale</strong>
@@ -533,60 +872,26 @@ export function ServicePageTemplate({
               </div>
             </div>
           </div>
-        </div>
-      </section>
-
-      <section className="section">
-        <div className="shell two-column">
           <div className="card stack">
             <p className="eyebrow">Affidabilità professionale</p>
             <h2 className="display-sm">Assistenza concreta, fondata su prova e strategia</h2>
             <p className="lead">{service.trust}</p>
-          </div>
-          <div className="card stack">
-            <h3>Contatto diretto con lo studio</h3>
-            <p className="muted">
-              Se ritieni che la situazione richieda una valutazione legale, puoi
-              contattare lo studio nei modi più adatti al tuo caso.
-            </p>
+            <TrackLink href="/contatti#modulo-contatti" label={`${service.slug}_mid_form`} className="button-primary">
+              Vai al modulo contatti
+            </TrackLink>
             <ContactActions scope={`${service.slug}_mid`} compact />
-            <ContactAvailabilityNote />
-          </div>
-        </div>
-      </section>
-
-      <section className="section-tight">
-        <div className="shell two-column">
-          <div className="card stack">
-            <h3>Approfondimenti utili</h3>
-            <div className="info-list">
-              {getServiceLinks(service).map((item) => (
-                <div key={item.href} className="info-item">
-                  <TrackLink href={item.href} label={`${service.slug}_${item.label}`} className="button-ghost">
-                    {item.label}
-                  </TrackLink>
-                  <p>{item.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="card stack">
-            <h3>Quando agire senza rinviare</h3>
-            <ul className="list">
-              <li>Quando esiste un rischio di perdita di prova o documenti rilevanti.</li>
-              <li>Quando le decisioni dei coeredi incidono su beni, somme o immobili.</li>
-              <li>Quando è necessario impostare subito la strategia prima di mediazione o causa.</li>
-            </ul>
           </div>
         </div>
       </section>
 
       <FaqSection title={`Domande frequenti su ${service.shortTitle.toLowerCase()}`} items={service.faq} />
-      <ArticleGrid
-        articles={relatedArticles}
-        eyebrow="Approfondimenti correlati"
-        title="Contenuti utili collegati a questa materia"
-      />
+      {relatedArticles.length > 0 ? (
+        <ArticleGrid
+          articles={relatedArticles}
+          eyebrow="Approfondimenti correlati"
+          title="Contenuti utili collegati a questa materia"
+        />
+      ) : null}
       <ContactSection
         title={`Parla con un avvocato per ${service.shortTitle.toLowerCase()}`}
         intro="Se desideri una valutazione del caso o hai già documenti da far esaminare, puoi usare il form oppure i contatti diretti dello studio."
@@ -604,6 +909,8 @@ export function HubPageTemplate({
   relatedArticles: ArticleEntry[];
   relatedServices: ServicePage[];
 }) {
+  const hubVisual = getHubVisual(hub);
+
   return (
     <>
       <section className="section">
@@ -619,19 +926,28 @@ export function HubPageTemplate({
             <p className="eyebrow">Area di approfondimento</p>
             <h1 className="display">{hub.title}</h1>
             <p className="lead">{hub.intro}</p>
-          </div>
-          <div className="panel">
-            <div className="panel-inner stack">
-              <h2>Argomenti collegati</h2>
-              <div className="tag-list">
-                {getHubEntities(hub).map((entity) => (
+            <div className="tag-list">
+              {getHubEntities(hub).map((entity) => {
+                const href = getTopicHref(entity);
+
+                return href ? (
+                  <TrackLink
+                    key={entity}
+                    href={href}
+                    label={`hub_${hub.slug}_topic_${entity}`}
+                    className="tag"
+                  >
+                    {entity}
+                  </TrackLink>
+                ) : (
                   <span key={entity} className="tag">
                     {entity}
                   </span>
-                ))}
-              </div>
+                );
+              })}
             </div>
           </div>
+          <EditorialFigure asset={hubVisual} />
         </div>
       </section>
 
@@ -642,7 +958,11 @@ export function HubPageTemplate({
               <h3>{section.title}</h3>
               <ul className="list">
                 {section.items.map((item) => (
-                  <li key={item}>{item}</li>
+                  <TopicListItem
+                    key={item}
+                    item={item}
+                    label={`hub_${hub.slug}_section_${item}`}
+                  />
                 ))}
               </ul>
             </div>
@@ -668,6 +988,8 @@ export function ArticlePageTemplate({
   article: ArticleEntry;
   relatedServices: ServicePage[];
 }) {
+  const articleVisual = getArticleVisual(article);
+
   return (
     <>
       <section className="section">
@@ -684,22 +1006,38 @@ export function ArticlePageTemplate({
             <h1 className="display">{article.title}</h1>
             <p className="lead">{article.answerFirst}</p>
             <div className="tag-list">
-              {getArticleEntities(article).map((entity) => (
-                <span key={entity} className="tag">
-                  {entity}
-                </span>
-              ))}
+              {getArticleEntities(article).map((entity) => {
+                const href = getTopicHref(entity);
+
+                return href ? (
+                  <TrackLink
+                    key={entity}
+                    href={href}
+                    label={`article_${article.slug}_topic_${entity}`}
+                    className="tag"
+                  >
+                    {entity}
+                  </TrackLink>
+                ) : (
+                  <span key={entity} className="tag">
+                    {entity}
+                  </span>
+                );
+              })}
             </div>
           </div>
-          <div className="panel">
-            <div className="panel-inner stack">
-              <h2>Domande che emergono più spesso</h2>
-              <div className="info-list">
-                {getArticleQuestions(article).map((question) => (
-                  <div key={question} className="info-item">
-                    <strong>{question}</strong>
-                  </div>
-                ))}
+          <div className="hero-side-stack">
+            <EditorialFigure asset={articleVisual} />
+            <div className="panel">
+              <div className="panel-inner stack">
+                <h2>Domande che emergono più spesso</h2>
+                <div className="info-list">
+                  {getArticleQuestions(article).map((question) => (
+                    <div key={question} className="info-item">
+                      <strong>{question}</strong>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -742,6 +1080,9 @@ export function ArticlePageTemplate({
             </div>
             <div className="card stack">
               <h3>Contatto rapido</h3>
+              <TrackLink href="/contatti#modulo-contatti" label={`article_${article.slug}_form`} className="button-primary">
+                Vai al modulo contatti
+              </TrackLink>
               <ContactActions scope={`article_${article.slug}_side`} compact />
             </div>
           </aside>

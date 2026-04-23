@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import { ContactSection, ServiceGrid } from "@/components/sections";
 import { JsonLd } from "@/components/json-ld";
 import { moneyPages, siteConfig } from "@/lib/content";
@@ -29,14 +31,27 @@ export default function ServicesArchivePage() {
         ]}
       />
       <section className="section">
-        <div className="shell stack">
-          <p className="eyebrow">Servizi</p>
-          <h1 className="display">Servizi legali in materia successoria</h1>
-          <p className="lead">
-            In questa sezione trovi le principali aree di assistenza dello studio:
-            successioni, testamenti, lesione di legittima, divisioni ereditarie,
-            donazioni, mediazione, eredità giacente e recupero somme ereditarie.
-          </p>
+        <div className="shell hero-grid">
+          <div className="stack">
+            <p className="eyebrow">Servizi</p>
+            <h1 className="display">Servizi legali in materia successoria</h1>
+            <p className="lead">
+              In questa sezione trovi le principali aree di assistenza dello studio:
+              successioni, testamenti, lesione di legittima, divisioni ereditarie,
+              donazioni, mediazione, eredità giacente e recupero somme ereditarie.
+            </p>
+          </div>
+          <div className="editorial-figure editorial-figure-standard">
+            <Image
+              src="/images/dettagli/codici-civile-successioni-ereditarie.png"
+              alt="Codici civili e testi sulle successioni ereditarie"
+              fill
+              priority
+              sizes="(max-width: 980px) 100vw, 50vw"
+              className="editorial-image"
+              style={{ objectPosition: "center center" }}
+            />
+          </div>
         </div>
       </section>
       <ServiceGrid services={moneyPages} />

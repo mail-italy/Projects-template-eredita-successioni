@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { ContactSection, FaqSection } from "@/components/sections";
 import { JsonLd } from "@/components/json-ld";
 import { thematicFaqs } from "@/lib/content";
@@ -34,7 +36,10 @@ export default function FaqPage() {
           </div>
           <div className="mini-card">
             <h3>Assistenza</h3>
-            <p>Quando la domanda riguarda un caso concreto, puoi passare direttamente al modulo di contatto o ai recapiti dello studio.</p>
+            <p>Quando la domanda riguarda un caso concreto, puoi passare direttamente al modulo o ai recapiti dello studio.</p>
+            <p>
+              <Link href="#modulo-contatti">Vai ai contatti</Link>
+            </p>
           </div>
         </div>
       </section>

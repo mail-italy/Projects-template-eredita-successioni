@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import { ArticleGrid, ContactSection } from "@/components/sections";
 import { JsonLd } from "@/components/json-ld";
 import { articles, siteConfig } from "@/lib/content";
@@ -29,14 +31,27 @@ export default function ArticlesArchivePage() {
         ]}
       />
       <section className="section">
-        <div className="shell stack">
-          <p className="eyebrow">Archivio approfondimenti</p>
-          <h1 className="display">Approfondimenti su eredità e successioni</h1>
-          <p className="lead">
-            Articoli e guide pensati per aiutare a comprendere i nodi più frequenti
-            del diritto successorio, con taglio chiaro, tecnico e orientato ai casi
-            concreti.
-          </p>
+        <div className="shell hero-grid">
+          <div className="stack">
+            <p className="eyebrow">Archivio approfondimenti</p>
+            <h1 className="display">Approfondimenti su eredità e successioni</h1>
+            <p className="lead">
+              Articoli e guide pensati per aiutare a comprendere i nodi più frequenti
+              del diritto successorio, con taglio chiaro, tecnico e orientato ai casi
+              concreti.
+            </p>
+          </div>
+          <div className="editorial-figure editorial-figure-standard">
+            <Image
+              src="/images/dettagli/avvocato-sfoglia-codice-civile.png"
+              alt="Consultazione di un codice civile nello studio legale"
+              fill
+              priority
+              sizes="(max-width: 980px) 100vw, 50vw"
+              className="editorial-image"
+              style={{ objectPosition: "center center" }}
+            />
+          </div>
         </div>
       </section>
       <ArticleGrid articles={articles} eyebrow="Archivio" title="Tutti gli approfondimenti" />

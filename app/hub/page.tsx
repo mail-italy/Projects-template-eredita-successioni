@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import { ContactSection, HubGrid } from "@/components/sections";
 import { JsonLd } from "@/components/json-ld";
 import { hubPages, siteConfig } from "@/lib/content";
@@ -29,14 +31,27 @@ export default function HubArchivePage() {
         ]}
       />
       <section className="section">
-        <div className="shell stack">
-          <p className="eyebrow">Aree di approfondimento</p>
-          <h1 className="display">Temi principali del diritto ereditario</h1>
-          <p className="lead">
-            Una raccolta ordinata dei temi che ricorrono più spesso nelle pratiche
-            successorie: testamenti, legittima, divisioni, donazioni, successione
-            legittima, profili internazionali e conflitti tra coeredi.
-          </p>
+        <div className="shell hero-grid">
+          <div className="stack">
+            <p className="eyebrow">Aree di approfondimento</p>
+            <h1 className="display">Temi principali del diritto ereditario</h1>
+            <p className="lead">
+              Una raccolta ordinata dei temi che ricorrono più spesso nelle pratiche
+              successorie: testamenti, legittima, divisioni, donazioni, successione
+              legittima, profili internazionali e conflitti tra coeredi.
+            </p>
+          </div>
+          <div className="editorial-figure editorial-figure-wide">
+            <Image
+              src="/images/home/eredita-successioni-hero-testamento-codici.png"
+              alt="Dettaglio editoriale di studio legale con testamento e codici"
+              fill
+              priority
+              sizes="(max-width: 980px) 100vw, 50vw"
+              className="editorial-image"
+              style={{ objectPosition: "center 34%" }}
+            />
+          </div>
         </div>
       </section>
       <HubGrid hubs={hubPages} />

@@ -1,8 +1,12 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
+import { ChangeEvent, FormEvent, useMemo, useState } from "react";
 
 import { contactRequestTopics } from "@/lib/content";
+
+const allowedAttachmentExtensions = [".pdf", ".doc", ".docx", ".jpg", ".jpeg", ".png"];
+const attachmentErrorMessage =
+  "Formato allegato non supportato. Usa PDF, DOC, DOCX, JPG, JPEG o PNG.";
 
 type FormState = {
   status: "idle" | "submitting" | "success" | "error";
@@ -16,6 +20,7 @@ const initialState: FormState = {
 
 export function ContactForm() {
   const [state, setState] = useState<FormState>(initialState);
+  const [attachmentError, setAttachmentError] = useState("");
 
   const successClassName = useMemo(() => {
     if (state.status === "success") {
@@ -29,20 +34,30 @@ export function ContactForm() {
     return "form-alert";
   }, [state.status]);
 
+  function hasAllowedAttachmentExtension(fileName: string) {
+    const normalized = fileName.toLowerCase();
+
+    return allowedAttachmentExtensions.some((extension) => normalized.endsWith(extension));
+  }
+
+  function handleAttachmentChange(event: ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(event.currentTarget.files ?? []);
+
+    if (files.length === 0) {
+      setAttachmentError("");
+      return;
+    }
+
+    const hasInvalidFile = files.some((file) => !hasAllowedAttachmentExtension(file.name));
+
+    setAttachmentError(hasInvalidFile ? attachmentErrorMessage : "");
+  }
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const form = event.currentTarget;
     const formData = new FormData(form);
-
-    if (String(formData.get("website") ?? "").trim() !== "") {
-      setState({
-        status: "success",
-        message: "Richiesta acquisita.",
-      });
-      form.reset();
-      return;
-    }
 
     if (formData.get("privacy") !== "accepted") {
       setState({
@@ -51,6 +66,25 @@ export function ContactForm() {
       });
       return;
     }
+
+    const selectedFiles = formData
+      .getAll("attachments")
+      .filter((value): value is File => value instanceof File && value.name.trim() !== "");
+
+    const hasInvalidAttachment = selectedFiles.some(
+      (file) => !hasAllowedAttachmentExtension(file.name),
+    );
+
+    if (hasInvalidAttachment) {
+      setAttachmentError(attachmentErrorMessage);
+      setState({
+        status: "error",
+        message: attachmentErrorMessage,
+      });
+      return;
+    }
+
+    setAttachmentError("");
 
     setState({
       status: "submitting",
@@ -137,11 +171,13 @@ export function ContactForm() {
             type="file"
             multiple
             accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+            onChange={handleAttachmentChange}
           />
           <small className="muted">
             Puoi allegare documenti utili alla prima valutazione. Formati consigliati:
-            PDF, DOC, DOCX, JPG, PNG.
+            PDF, DOC, DOCX, JPG, JPEG, PNG.
           </small>
+          {attachmentError ? <small className="form-field-error">{attachmentError}</small> : null}
         </label>
         <label className="field field-honeypot" aria-hidden="true">
           <span>Sito web</span>

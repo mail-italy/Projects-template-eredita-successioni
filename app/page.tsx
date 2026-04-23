@@ -3,6 +3,7 @@ import {
   ContactSection,
   FaqSection,
   HeroSection,
+  HomeVideoSection,
   HubGrid,
   ProblemsSection,
   ServiceGrid,
@@ -41,6 +42,7 @@ export default function HomePage() {
   return (
     <>
       <HeroSection />
+      <HomeVideoSection />
       <ProblemsSection items={mainProblems} />
       <WorkSection />
       <HubGrid hubs={hubPages} />
