@@ -17,6 +17,7 @@ const deliveryNotConfiguredMessage =
   "Invio email non configurato sul server. Imposta CONTACT_FROM_EMAIL, CONTACT_TO_EMAIL, SMTP_HOST, SMTP_PORT, SMTP_USER e SMTP_PASS.";
 const deliveryFailureMessage =
   "La richiesta non è stata inviata via email. Riprova oppure usa temporaneamente telefono, WhatsApp o Mail.";
+const emailBannerText = "Richiesta proveniente dal sito Eredità e Successioni";
 
 function escapeHtml(value: string) {
   return value
@@ -126,7 +127,9 @@ export async function POST(request: Request) {
       : "Nessuno";
 
   const text = [
-    "Nuova richiesta dal form contatti",
+    emailBannerText,
+    "",
+    "Nuova richiesta dal modulo contatti",
     `Nome: ${name}`,
     `Cognome: ${surname}`,
     `Telefono: ${phone}`,
@@ -138,15 +141,68 @@ export async function POST(request: Request) {
   ].join("\n");
 
   const html = `
-    <div style="font-family: Arial, sans-serif; color: #16202b; line-height: 1.6;">
-      <h1 style="font-size: 20px; margin-bottom: 16px;">Nuova richiesta dal form contatti</h1>
-      <p><strong>Nome:</strong> ${escapeHtml(name)}</p>
-      <p><strong>Cognome:</strong> ${escapeHtml(surname)}</p>
-      <p><strong>Telefono:</strong> ${escapeHtml(phone)}</p>
-      <p><strong>Email:</strong> ${escapeHtml(email)}</p>
-      <p><strong>Ambito richiesta:</strong> ${escapeHtml(topic)}</p>
-      <p><strong>Sintesi del caso:</strong><br />${escapedSummary}</p>
-      <p><strong>Allegati:</strong> ${attachmentSummary}</p>
+    <div style="margin:0; padding:32px 0; background:#f4efe7; color:#16202b;">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;">
+        <tr>
+          <td align="center" style="padding:0 16px;">
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:720px; border-collapse:separate; border-spacing:0; overflow:hidden; background:#ffffff; border:1px solid rgba(48,65,85,0.12); border-radius:20px; box-shadow:0 18px 45px rgba(16,32,51,0.08);">
+              <tr>
+                <td style="background:#c7792d; padding:16px 24px; font-family:Arial, sans-serif; font-size:15px; font-weight:700; line-height:1.45; color:#ffffff;">
+                  ${emailBannerText}
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:28px 24px 10px; font-family:Arial, sans-serif;">
+                  <p style="margin:0 0 8px; font-size:12px; letter-spacing:0.16em; text-transform:uppercase; color:#8b6a3e; font-weight:700;">
+                    Studio Legale Del Monte
+                  </p>
+                  <h1 style="margin:0; font-size:24px; line-height:1.2; color:#16202b;">
+                    Nuova richiesta dal modulo contatti
+                  </h1>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:16px 24px 28px; font-family:Arial, sans-serif; color:#16202b;">
+                  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;">
+                    <tr>
+                      <td style="padding:0 0 12px; width:180px; vertical-align:top; font-size:13px; line-height:1.45; color:#7b8796; font-weight:700;">Nome</td>
+                      <td style="padding:0 0 12px; font-size:15px; line-height:1.55; color:#16202b;">${escapeHtml(name)}</td>
+                    </tr>
+                    <tr>
+                      <td style="padding:0 0 12px; width:180px; vertical-align:top; font-size:13px; line-height:1.45; color:#7b8796; font-weight:700;">Cognome</td>
+                      <td style="padding:0 0 12px; font-size:15px; line-height:1.55; color:#16202b;">${escapeHtml(surname)}</td>
+                    </tr>
+                    <tr>
+                      <td style="padding:0 0 12px; width:180px; vertical-align:top; font-size:13px; line-height:1.45; color:#7b8796; font-weight:700;">Telefono</td>
+                      <td style="padding:0 0 12px; font-size:15px; line-height:1.55; color:#16202b;">${escapeHtml(phone)}</td>
+                    </tr>
+                    <tr>
+                      <td style="padding:0 0 12px; width:180px; vertical-align:top; font-size:13px; line-height:1.45; color:#7b8796; font-weight:700;">Email</td>
+                      <td style="padding:0 0 12px; font-size:15px; line-height:1.55; color:#16202b;">${escapeHtml(email)}</td>
+                    </tr>
+                    <tr>
+                      <td style="padding:0 0 12px; width:180px; vertical-align:top; font-size:13px; line-height:1.45; color:#7b8796; font-weight:700;">Ambito richiesta</td>
+                      <td style="padding:0 0 12px; font-size:15px; line-height:1.55; color:#16202b;">${escapeHtml(topic)}</td>
+                    </tr>
+                    <tr>
+                      <td style="padding:4px 0 12px; width:180px; vertical-align:top; font-size:13px; line-height:1.45; color:#7b8796; font-weight:700;">Sintesi del caso</td>
+                      <td style="padding:4px 0 12px;">
+                        <div style="padding:16px 18px; border-radius:16px; background:#f7f3ec; border:1px solid rgba(48,65,85,0.1); font-size:15px; line-height:1.7; color:#16202b;">
+                          ${escapedSummary}
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="padding:0; width:180px; vertical-align:top; font-size:13px; line-height:1.45; color:#7b8796; font-weight:700;">Allegati</td>
+                      <td style="padding:0; font-size:15px; line-height:1.55; color:#16202b;">${attachmentSummary}</td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
     </div>
   `;
 

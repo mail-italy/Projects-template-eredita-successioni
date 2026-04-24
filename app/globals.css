@@ -594,6 +594,8 @@ video:focus-visible {
 
 .home-video-shell {
   width: 100%;
+  content-visibility: auto;
+  contain-intrinsic-size: 630px;
 }
 
 .home-video-shell > div {

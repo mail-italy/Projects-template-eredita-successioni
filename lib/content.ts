@@ -9,10 +9,13 @@ export const siteConfig = {
   locale: "it_IT",
 };
 
+const whatsappBaseMessage =
+  "Messaggio proveniente dal sito Eredità e Successioni.\n\nBuongiorno, desidero richiedere una prima valutazione su una questione di eredità o successione.";
+
 export const contacts = {
   phoneDisplay: "+39 06 97615122",
   phoneHref: "tel:+390697615122",
-  whatsappHref: "https://wa.me/390697615122",
+  whatsappHref: `https://wa.me/390697615122?text=${encodeURIComponent(whatsappBaseMessage)}`,
   email: "info@delmontestudiolegale.it",
   emailHref: "mailto:info@delmontestudiolegale.it",
   address: "Via Costanza Baudana Vaccolini, 5 – 00153 Roma",

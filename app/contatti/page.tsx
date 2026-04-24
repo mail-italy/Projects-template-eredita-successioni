@@ -63,7 +63,7 @@ export default function ContactsPage() {
                 </div>
                 <div className="contact-item">
                   <strong>WhatsApp</strong>
-                  <div className="muted">{contacts.whatsappHref}</div>
+                  <div className="muted">Chat diretta con messaggio introduttivo dal sito</div>
                 </div>
                 <div className="contact-item">
                   <strong>Email</strong>

@@ -136,6 +136,7 @@ function EditorialFigure({
         alt={asset.alt}
         fill
         priority={asset.priority}
+        loading={asset.priority ? "eager" : "lazy"}
         sizes={asset.sizes ?? "(max-width: 980px) 100vw, 50vw"}
         className="editorial-image"
         style={{ objectPosition: asset.objectPosition ?? "center center" }}
@@ -144,9 +145,9 @@ function EditorialFigure({
   );
 }
 
-function getServiceVisual(service: ServicePage): VisualAsset {
+function getServiceVisual(service: ServicePage, priority = false): VisualAsset {
   const base = {
-    priority: true,
+    priority,
     sizes: "(max-width: 980px) 100vw, 46vw",
   };
 
@@ -242,9 +243,9 @@ function getServiceVisual(service: ServicePage): VisualAsset {
   }
 }
 
-function getHubVisual(hub: HubPage): VisualAsset {
+function getHubVisual(hub: HubPage, priority = false): VisualAsset {
   const base = {
-    priority: true,
+    priority,
     sizes: "(max-width: 980px) 100vw, 46vw",
   };
 
@@ -310,9 +311,9 @@ function getHubVisual(hub: HubPage): VisualAsset {
   }
 }
 
-function getArticleVisual(article: ArticleEntry): VisualAsset {
+function getArticleVisual(article: ArticleEntry, priority = false): VisualAsset {
   const base = {
-    priority: true,
+    priority,
     sizes: "(max-width: 980px) 100vw, 46vw",
   };
 
@@ -784,7 +785,7 @@ export function ServicePageTemplate({
   service: ServicePage;
   relatedArticles: ArticleEntry[];
 }) {
-  const serviceVisual = getServiceVisual(service);
+  const serviceVisual = getServiceVisual(service, true);
 
   return (
     <>
@@ -901,7 +902,7 @@ export function HubPageTemplate({
   relatedArticles: ArticleEntry[];
   relatedServices: ServicePage[];
 }) {
-  const hubVisual = getHubVisual(hub);
+  const hubVisual = getHubVisual(hub, true);
 
   return (
     <>
@@ -979,7 +980,7 @@ export function ArticlePageTemplate({
   article: ArticleEntry;
   relatedServices: ServicePage[];
 }) {
-  const articleVisual = getArticleVisual(article);
+  const articleVisual = getArticleVisual(article, true);
 
   return (
     <>
