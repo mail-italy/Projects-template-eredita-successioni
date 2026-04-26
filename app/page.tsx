@@ -91,6 +91,8 @@ export default function HomePage() {
               alt="Avvocato per successioni ed eredità a Roma"
               fill
               priority
+              fetchPriority="high"
+              loading="eager"
               sizes="(max-width: 760px) 100vw, 1380px"
               className="homepage-hero-image"
             />

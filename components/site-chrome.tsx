@@ -305,34 +305,31 @@ export function FloatingContact() {
             : "mobile-contact-fab-wrap"
         }
       >
-        <div
-          id="mobile-contact-sheet"
-          className={
-            mobileContactsOpen
-              ? "mobile-speed-dial mobile-speed-dial-open"
-              : "mobile-speed-dial"
-          }
-          aria-hidden={!mobileContactsOpen}
-        >
-          {mobileActions.map((action) => (
-            <div key={action.key} className="mobile-speed-dial-row">
-              <span className="mobile-speed-dial-label">{action.label}</span>
-              <Link
-                href={action.href}
-                className={`mobile-speed-dial-button ${action.className}`}
-                aria-label={action.ariaLabel}
-                title={action.label}
-                target={action.target}
-                rel={action.rel}
-                data-track-event={action.key === "request" ? "contact_form_click" : action.key === "phone" ? "phone_click" : action.key === "mail" ? "email_click" : "whatsapp_click"}
-                data-track-label={`mobile_fab_${action.key}`}
-                onClick={() => setMobileContactsOpen(false)}
-              >
-                {action.icon}
-              </Link>
-            </div>
-          ))}
-        </div>
+        {mobileContactsOpen ? (
+          <div
+            id="mobile-contact-sheet"
+            className="mobile-speed-dial mobile-speed-dial-open"
+          >
+            {mobileActions.map((action) => (
+              <div key={action.key} className="mobile-speed-dial-row">
+                <span className="mobile-speed-dial-label">{action.label}</span>
+                <Link
+                  href={action.href}
+                  className={`mobile-speed-dial-button ${action.className}`}
+                  aria-label={action.ariaLabel}
+                  title={action.label}
+                  target={action.target}
+                  rel={action.rel}
+                  data-track-event={action.key === "request" ? "contact_form_click" : action.key === "phone" ? "phone_click" : action.key === "mail" ? "email_click" : "whatsapp_click"}
+                  data-track-label={`mobile_fab_${action.key}`}
+                  onClick={() => setMobileContactsOpen(false)}
+                >
+                  {action.icon}
+                </Link>
+              </div>
+            ))}
+          </div>
+        ) : null}
 
         <button
           type="button"
