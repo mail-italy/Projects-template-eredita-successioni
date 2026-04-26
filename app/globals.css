@@ -419,11 +419,12 @@ video:focus-visible {
   background:
     linear-gradient(
       90deg,
-      rgba(8, 19, 31, 0.92) 0%,
-      rgba(8, 19, 31, 0.84) 30%,
-      rgba(8, 19, 31, 0.48) 50%,
-      rgba(8, 19, 31, 0.1) 68%,
-      rgba(8, 19, 31, 0) 82%
+      rgba(15, 23, 42, 0.38) 0%,
+      rgba(15, 23, 42, 0.28) 18%,
+      rgba(15, 23, 42, 0.16) 38%,
+      rgba(15, 23, 42, 0.08) 58%,
+      rgba(15, 23, 42, 0.03) 78%,
+      rgba(15, 23, 42, 0) 100%
     );
   pointer-events: none;
 }
@@ -433,8 +434,8 @@ video:focus-visible {
   position: absolute;
   inset: auto 0 0 0;
   z-index: 1;
-  height: 38%;
-  background: linear-gradient(180deg, rgba(15, 32, 49, 0), rgba(15, 32, 49, 0.32));
+  height: 32%;
+  background: linear-gradient(180deg, rgba(15, 32, 49, 0), rgba(15, 32, 49, 0.12));
   pointer-events: none;
 }
 
@@ -1285,10 +1286,12 @@ a.tag:hover {
     background:
       linear-gradient(
         90deg,
-        rgba(8, 19, 31, 0.92) 0%,
-        rgba(8, 19, 31, 0.78) 34%,
-        rgba(8, 19, 31, 0.36) 56%,
-        rgba(8, 19, 31, 0.04) 76%
+        rgba(15, 23, 42, 0.38) 0%,
+        rgba(15, 23, 42, 0.28) 18%,
+        rgba(15, 23, 42, 0.16) 38%,
+        rgba(15, 23, 42, 0.08) 58%,
+        rgba(15, 23, 42, 0.03) 78%,
+        rgba(15, 23, 42, 0) 100%
       );
   }
 

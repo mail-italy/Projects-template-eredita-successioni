@@ -91,7 +91,7 @@ export default function DivisioneGioielliEreditaPage() {
                   inset: 0,
                   zIndex: 1,
                   background:
-                    "linear-gradient(90deg, rgba(8, 19, 31, 0.5) 0%, rgba(8, 19, 31, 0.36) 30%, rgba(8, 19, 31, 0.16) 56%, rgba(8, 19, 31, 0.04) 76%, rgba(8, 19, 31, 0) 100%)",
+                    "linear-gradient(90deg, rgba(15, 23, 42, 0.38) 0%, rgba(15, 23, 42, 0.28) 18%, rgba(15, 23, 42, 0.16) 38%, rgba(15, 23, 42, 0.08) 58%, rgba(15, 23, 42, 0.03) 78%, rgba(15, 23, 42, 0.00) 100%)",
                   pointerEvents: "none",
                 }}
               />
