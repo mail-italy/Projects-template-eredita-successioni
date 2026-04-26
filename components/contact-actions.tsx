@@ -15,7 +15,7 @@ type ContactActionsProps = {
   compact?: boolean;
 };
 
-function getRomeTimeState(date: Date) {
+export function getRomeTimeState(date: Date) {
   const formatter = new Intl.DateTimeFormat("it-IT", {
     timeZone: "Europe/Rome",
     hour: "2-digit",
@@ -37,15 +37,7 @@ function getRomeTimeState(date: Date) {
   };
 }
 
-export function ContactActions({
-  scope,
-  className,
-  includePhone = true,
-  includeEmail = true,
-  includeWhatsapp = true,
-  includeRequest = true,
-  compact = false,
-}: ContactActionsProps) {
+export function useRomeTimeState() {
   const [timeState, setTimeState] = useState<ReturnType<typeof getRomeTimeState> | null>(null);
 
   useEffect(() => {
@@ -56,6 +48,20 @@ export function ContactActions({
 
     return () => window.clearInterval(timer);
   }, []);
+
+  return timeState;
+}
+
+export function ContactActions({
+  scope,
+  className,
+  includePhone = true,
+  includeEmail = true,
+  includeWhatsapp = true,
+  includeRequest = true,
+  compact = false,
+}: ContactActionsProps) {
+  const timeState = useRomeTimeState();
 
   const wrapperClassName = useMemo(
     () => [compact ? "contact-actions-compact" : "cluster", className].filter(Boolean).join(" "),
@@ -116,16 +122,7 @@ export function ContactActions({
 }
 
 export function ContactAvailabilityNote() {
-  const [timeState, setTimeState] = useState<ReturnType<typeof getRomeTimeState> | null>(null);
-
-  useEffect(() => {
-    const sync = () => setTimeState(getRomeTimeState(new Date()));
-
-    sync();
-    const timer = window.setInterval(sync, 60000);
-
-    return () => window.clearInterval(timer);
-  }, []);
+  const timeState = useRomeTimeState();
 
   return (
     <p className="muted">
