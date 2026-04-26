@@ -27,8 +27,8 @@ export async function generateMetadata({ params }: Props) {
   }
 
   return buildMetadata({
-    title: service.title,
-    description: service.description,
+    title: service.seoTitle ?? service.title,
+    description: service.seoDescription ?? service.description,
     path: `/${service.slug}`,
   });
 }

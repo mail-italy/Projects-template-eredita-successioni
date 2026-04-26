@@ -109,7 +109,7 @@ export default function HomePage() {
                   </Link>
                   <Link
                     href={contacts.whatsappHref}
-                    className="button-request homepage-cta"
+                    className="button-whatsapp homepage-cta"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -219,7 +219,7 @@ export default function HomePage() {
               </Link>
               <Link
                 href={contacts.whatsappHref}
-                className="button-request"
+                className="button-whatsapp"
                 target="_blank"
                 rel="noopener noreferrer"
               >

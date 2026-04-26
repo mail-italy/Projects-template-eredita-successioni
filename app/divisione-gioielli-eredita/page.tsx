@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
-import { FaqSection } from "@/components/sections";
+import { FaqSection, SpecialInheritanceAssetsSection } from "@/components/sections";
 import { JsonLd } from "@/components/json-ld";
 import { contacts } from "@/lib/content";
 import { breadcrumbSchema, faqSchema } from "@/lib/seo";
@@ -154,7 +154,7 @@ export default function DivisioneGioielliEreditaPage() {
                     </Link>
                     <Link
                       href={contacts.whatsappHref}
-                      className="button-request"
+                      className="button-whatsapp"
                       target="_blank"
                       rel="noopener noreferrer"
                       style={{
@@ -368,6 +368,11 @@ export default function DivisioneGioielliEreditaPage() {
       <FaqSection
         title="Domande frequenti sulla divisione dei gioielli ereditati"
         items={pageFaqs}
+      />
+
+      <SpecialInheritanceAssetsSection
+        currentHref="/divisione-gioielli-eredita"
+        intro="Gioielli, immobili, auto, animali domestici e rapporti bancari possono richiedere verifiche diverse nella stessa successione. Qui trovi le pagine più vicine ai casi di beni particolari."
       />
 
       <style

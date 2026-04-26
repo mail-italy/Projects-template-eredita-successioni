@@ -1,6 +1,11 @@
 import Image from "next/image";
 
-import { ContactSection, FaqSection, ServiceGrid } from "@/components/sections";
+import {
+  ContactSection,
+  FaqSection,
+  ServiceGrid,
+  SpecialInheritanceAssetsSection,
+} from "@/components/sections";
 import { ContactActions } from "@/components/contact-actions";
 import { JsonLd } from "@/components/json-ld";
 import { moneyPages, servicesArchiveFaqs, siteConfig } from "@/lib/content";
@@ -58,6 +63,10 @@ export default function ServicesArchivePage() {
         </div>
       </section>
       <ServiceGrid services={moneyPages} />
+      <SpecialInheritanceAssetsSection
+        title="Beni particolari in eredità"
+        intro="Oltre ai servizi successori principali, alcune pagine affrontano beni specifici che generano conflitti pratici immediati tra gli eredi: immobili, affitti, auto, gioielli, animali domestici e rapporti bancari."
+      />
       <FaqSection title="Domande frequenti sui servizi dello studio" items={servicesArchiveFaqs} />
       <ContactSection />
     </>

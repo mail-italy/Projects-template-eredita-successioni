@@ -217,11 +217,11 @@ main {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  min-height: 46px;
-  padding: 0 18px;
-  border-radius: 999px;
+  min-height: 50px;
+  padding: 0 16px;
+  border-radius: 18px;
   font-weight: 700;
-  font-size: 0.94rem;
+  font-size: 0.92rem;
   line-height: 1.2;
   text-align: center;
   transition: transform 160ms ease, background 160ms ease, color 160ms ease;
@@ -759,6 +759,21 @@ video:focus-visible {
   flex-wrap: wrap;
   gap: 8px;
   align-items: center;
+}
+
+.contact-actions-compact > * {
+  flex: 0 0 auto;
+}
+
+.glossary-links {
+  gap: 8px;
+}
+
+.glossary-link-button {
+  min-height: 40px;
+  padding: 0 14px;
+  font-size: 0.84rem;
+  font-weight: 700;
 }
 
 .brand-mark {
@@ -1330,7 +1345,7 @@ a.tag:hover {
   .button-call,
   .button-whatsapp,
   .button-mail {
-    min-height: 40px;
+    min-height: 48px;
     padding: 0 14px;
     font-size: 0.84rem;
   }

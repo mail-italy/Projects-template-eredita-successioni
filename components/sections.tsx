@@ -8,13 +8,15 @@ import {
   GlossaryTerm,
   HubPage,
   mainProblems,
-  moneyPages,
   ServicePage,
   trustSignals,
   workSteps,
+  getArticle,
   getArticleEntities,
   getArticleQuestions,
+  getHub,
   getHubEntities,
+  getService,
 } from "@/lib/content";
 import { ContactActions, ContactAvailabilityNote } from "@/components/contact-actions";
 import { ContactForm } from "@/components/contact-form";
@@ -191,6 +193,46 @@ function getServiceVisual(service: ServicePage, priority = false): VisualAsset {
         alt: "Consultazione di un codice civile in studio legale",
         objectPosition: "center center",
         figureClassName: "editorial-figure-standard",
+      };
+    case "animali-domestici-eredita":
+      return {
+        ...base,
+        src: "/images/generated/animali-domestici-eredita-desktop.webp",
+        alt: "Animale domestico di famiglia in un contesto ereditario",
+        objectPosition: "center center",
+        figureClassName: "editorial-figure-wide",
+      };
+    case "auto-ereditata":
+      return {
+        ...base,
+        src: "/images/generated/auto-ereditata-desktop.webp",
+        alt: "Auto da gestire tra coeredi nell'ambito di una successione",
+        objectPosition: "center center",
+        figureClassName: "editorial-figure-wide",
+      };
+    case "casa-ereditata":
+      return {
+        ...base,
+        src: "/images/generated/casa-ereditata-desktop.webp",
+        alt: "Casa ereditata da dividere tra coeredi",
+        objectPosition: "center center",
+        figureClassName: "editorial-figure-wide",
+      };
+    case "affitti-immobili-ereditati":
+      return {
+        ...base,
+        src: "/images/generated/affitti-immobili-ereditati-desktop.webp",
+        alt: "Gestione degli affitti di un immobile ereditato",
+        objectPosition: "center center",
+        figureClassName: "editorial-figure-wide",
+      };
+    case "conti-correnti-azioni-polizze-eredita":
+      return {
+        ...base,
+        src: "/images/generated/conti-correnti-azioni-polizze-eredita-desktop.webp",
+        alt: "Documenti bancari e investimenti da dividere in successione",
+        objectPosition: "center center",
+        figureClassName: "editorial-figure-wide",
       };
     case "successioni-internazionali":
       return {
@@ -733,7 +775,7 @@ export function ContactSection({
 }) {
   return (
     <>
-      <section className="section" id="modulo-contatti">
+      <section className="section">
         <div className="shell panel">
           <div className="panel-inner contact-grid">
             <div className="stack">
@@ -762,7 +804,11 @@ export function ContactSection({
               <ContactActions scope="contact_section" includeEmail includePhone includeWhatsapp compact />
             </div>
 
-            <div className="card contact-form-card stack">
+            <div
+              id="modulo-contatti"
+              className="card contact-form-card stack"
+              style={{ scrollMarginTop: "110px" }}
+            >
               <h3>Richiesta di contatto</h3>
               <p className="muted">
                 Compila il modulo con i dati essenziali del caso e allega, se utile,
@@ -778,6 +824,411 @@ export function ContactSection({
   );
 }
 
+const serviceLandingTitles: Record<string, string> = {
+  "avvocato-successioni": "Hai bisogno di un avvocato per una successione complessa?",
+  "impugnazione-testamento": "Vuoi contestare un testamento?",
+  "divisione-ereditaria": "La divisione ereditaria è bloccata?",
+  "lesione-di-legittima": "La tua quota di legittima è stata lesa?",
+  "collazione-e-donazioni": "Donazioni fatte in vita alterano l’eredità?",
+  "successioni-internazionali": "Ci sono beni o eredi all’estero?",
+  "mediazione-ereditaria": "Vuoi evitare una causa tra eredi?",
+  "eredita-giacente": "L’eredità è senza gestione o senza eredi certi?",
+  "rinuncia-eredita": "Conviene rinunciare all’eredità?",
+  "recupero-somme-ereditarie": "Devi recuperare somme ereditarie o conti del defunto?",
+};
+
+function getServiceHeroTitle(service: ServicePage) {
+  return service.heroTitle;
+}
+
+const specialInheritanceAssetCards = [
+  {
+    href: "/divisione-gioielli-eredita",
+    title: "Gioielli e preziosi",
+    description:
+      "Come dividere gioielli, preziosi e beni mobili di valore.",
+  },
+  {
+    href: "/animali-domestici-eredita",
+    title: "Animali domestici",
+    description:
+      "Cosa fare se gli eredi litigano sull’animale domestico.",
+  },
+  {
+    href: "/auto-ereditata",
+    title: "Auto ereditata",
+    description:
+      "Voltura, uso, vendita o assegnazione dell’auto caduta in successione.",
+  },
+  {
+    href: "/casa-ereditata",
+    title: "Casa ereditata",
+    description:
+      "Vendita, assegnazione, uso esclusivo e conguagli sulla casa ereditata.",
+  },
+  {
+    href: "/affitti-immobili-ereditati",
+    title: "Affitti immobiliari",
+    description:
+      "Ripartizione dei canoni incassati da immobili ereditati.",
+  },
+  {
+    href: "/conti-correnti-azioni-polizze-eredita",
+    title: "Conti correnti, azioni e polizze",
+    description:
+      "Conti, titoli, azioni, polizze e somme del defunto.",
+  },
+];
+
+const specialInheritanceClusterSlugs = new Set([
+  "divisione-ereditaria",
+  "recupero-somme-ereditarie",
+  "animali-domestici-eredita",
+  "auto-ereditata",
+  "casa-ereditata",
+  "affitti-immobili-ereditati",
+  "conti-correnti-azioni-polizze-eredita",
+]);
+
+export function SpecialInheritanceAssetsSection({
+  currentHref,
+  title = "Beni particolari in eredità",
+  intro = "Quando la successione riguarda beni specifici o difficili da gestire, conviene leggere anche le pagine dedicate ai casi più ricorrenti.",
+}: {
+  currentHref?: string;
+  title?: string;
+  intro?: string;
+}) {
+  const cards = specialInheritanceAssetCards.filter((item) => item.href !== currentHref);
+
+  return (
+    <section className="section-tight">
+      <div className="shell">
+        <div className="card stack">
+          <p className="eyebrow">Cluster tematico</p>
+          <h2 className="display-sm">{title}</h2>
+          <p className="muted">{intro}</p>
+          <div className="cards-grid">
+            {cards.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="card stack clickable-card"
+                data-track-event="cta_click"
+                data-track-label={`special_asset_${item.href}`}
+              >
+                <h3>{item.title}</h3>
+                <p className="muted">{item.description}</p>
+                <span className="button-ghost card-link-cta">Vai alla pagina dedicata</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function getTrustCards(kind: "service" | "hub" | "article", slug?: string) {
+  const firstCard =
+    slug === "successioni-internazionali" || slug === "successioni-internazionali-cosa-cambia"
+      ? "Coordinamento su successioni con elementi esteri"
+      : "Esperienza in successioni complesse";
+
+  const articleFirstCard =
+    slug === "successioni-internazionali-cosa-cambia"
+      ? "Lettura chiara di casi con beni, documenti o eredi all’estero"
+      : "Approccio tecnico ma leggibile anche nei casi più delicati";
+
+  return [
+    kind === "article" ? articleFirstCard : firstCard,
+    "Gestione stragiudiziale e giudiziale",
+    "Studio legale a Roma con operatività nazionale",
+    "Approccio riservato, probatorio e strategico",
+  ];
+}
+
+function LandingActionButtons({ scope }: { scope: string }) {
+  return (
+    <div className="landing-template-cta-row">
+      <TrackLink
+        href="/contatti#modulo-contatti"
+        label={`${scope}_contact`}
+        className="button-primary landing-template-cta"
+      >
+        Contatta lo Studio
+      </TrackLink>
+      <Link
+        href={contacts.whatsappHref}
+        className="button-whatsapp landing-template-cta"
+        target="_blank"
+        rel="noopener noreferrer"
+        data-track-event="whatsapp_click"
+        data-track-label={`${scope}_whatsapp`}
+      >
+        Scrivi su WhatsApp
+      </Link>
+    </div>
+  );
+}
+
+function LandingHero({
+  eyebrow,
+  title,
+  intro,
+  microCases,
+  asset,
+  breadcrumbs,
+  scope,
+}: {
+  eyebrow: string;
+  title: string;
+  intro: string;
+  microCases: string[];
+  asset: VisualAsset;
+  breadcrumbs: React.ReactNode;
+  scope: string;
+}) {
+  return (
+    <>
+      <LandingTemplateStyles />
+      <section className="hero-section">
+        <div className="hero-shell landing-template-shell">
+          <div className="landing-template-hero">
+            <Image
+              src={asset.src}
+              alt={asset.alt}
+              fill
+              priority={asset.priority}
+              loading={asset.priority ? "eager" : "lazy"}
+              sizes="100vw"
+              className="landing-template-hero-image"
+              style={{ objectPosition: asset.objectPosition ?? "center center" }}
+            />
+            <div className="landing-template-hero-overlay" aria-hidden="true" />
+            <div className="landing-template-hero-content">
+              <div className="landing-template-hero-copy">
+                <p className="eyebrow landing-template-eyebrow">{eyebrow}</p>
+                <h1 className="display landing-template-title">{title}</h1>
+                <p className="lead landing-template-lead">{intro}</p>
+                {microCases.length > 0 ? (
+                  <div className="landing-template-tags">
+                    {microCases.slice(0, 4).map((item) => (
+                      <span key={item} className="tag landing-template-tag">
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
+                <LandingActionButtons scope={scope} />
+                <p className="landing-template-note">
+                  Puoi iniziare con un messaggio WhatsApp oppure usare il modulo
+                  contatti per un primo inquadramento del caso.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="section-tight">
+        <div className="shell">
+          <nav className="breadcrumbs" aria-label="Breadcrumb">
+            {breadcrumbs}
+          </nav>
+        </div>
+      </section>
+    </>
+  );
+}
+
+function LandingTemplateStyles() {
+  return (
+    <style
+      dangerouslySetInnerHTML={{
+        __html: `
+          .landing-template-shell {
+            width: min(calc(100% - 8px), 100vw);
+          }
+
+          .landing-template-hero {
+            position: relative;
+            min-height: clamp(620px, 82vh, 880px);
+            border-radius: 34px;
+            overflow: hidden;
+            border: 1px solid rgba(48, 65, 85, 0.12);
+            box-shadow: 0 34px 88px rgba(15, 32, 49, 0.12);
+            background: #ddd4c8;
+          }
+
+          .landing-template-hero-image {
+            object-fit: cover;
+            filter: brightness(1.08) saturate(0.96) contrast(1.01);
+          }
+
+          .landing-template-hero-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background:
+              linear-gradient(
+                90deg,
+                rgba(8, 19, 31, 0.48) 0%,
+                rgba(8, 19, 31, 0.34) 28%,
+                rgba(8, 19, 31, 0.14) 56%,
+                rgba(8, 19, 31, 0.04) 78%,
+                rgba(8, 19, 31, 0) 100%
+              );
+          }
+
+          .landing-template-hero-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            min-height: inherit;
+            width: min(calc(100% - 44px), 1380px);
+            margin: 0 auto;
+            padding: 138px 0 42px;
+          }
+
+          .landing-template-hero-copy {
+            max-width: 590px;
+            display: grid;
+            gap: 18px;
+          }
+
+          .landing-template-eyebrow,
+          .landing-template-note {
+            color: rgba(247, 244, 239, 0.88);
+          }
+
+          .landing-template-title {
+            color: #f7f4ef;
+            max-width: 12ch;
+            font-size: clamp(2.5rem, 4.3vw, 4.15rem);
+            line-height: 1.03;
+          }
+
+          .landing-template-lead {
+            color: rgba(247, 244, 239, 0.92);
+            max-width: 54ch;
+            line-height: 1.7;
+          }
+
+          .landing-template-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            max-width: 44rem;
+          }
+
+          .landing-template-tag {
+            border-color: rgba(255, 255, 255, 0.14);
+            background: rgba(255, 255, 255, 0.12);
+            color: #f7f4ef;
+          }
+
+          .landing-template-cta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            max-width: 470px;
+          }
+
+          .landing-template-cta {
+            min-height: 50px !important;
+            min-width: 210px;
+            padding: 0 18px !important;
+            flex: 1 1 210px;
+          }
+
+          .landing-template-note {
+            margin: 0;
+            line-height: 1.6;
+            font-size: 0.95rem;
+          }
+
+          @media (max-width: 980px) {
+            .landing-template-shell {
+              width: min(calc(100% - 32px), 1380px);
+            }
+
+            .landing-template-hero-content {
+              width: min(calc(100% - 32px), 920px);
+              padding-top: 116px;
+              padding-bottom: 28px;
+            }
+
+            .landing-template-hero-copy {
+              max-width: 510px;
+            }
+          }
+
+          @media (max-width: 760px) {
+            .landing-template-hero {
+              min-height: 620px;
+              border-radius: 24px;
+            }
+
+            .landing-template-hero-image {
+              object-position: center center !important;
+            }
+
+            .landing-template-hero-overlay {
+              background:
+                linear-gradient(
+                  180deg,
+                  rgba(8, 19, 31, 0.16) 0%,
+                  rgba(8, 19, 31, 0.1) 30%,
+                  rgba(8, 19, 31, 0.22) 62%,
+                  rgba(8, 19, 31, 0.58) 100%
+                );
+            }
+
+            .landing-template-hero-content {
+              width: min(calc(100% - 24px), 720px);
+              padding: 88px 0 18px;
+              align-items: flex-end;
+            }
+
+            .landing-template-hero-copy {
+              max-width: none;
+              gap: 14px;
+            }
+
+            .landing-template-title {
+              max-width: 100%;
+              font-size: clamp(1.95rem, 7.8vw, 2.7rem);
+              line-height: 1.05;
+            }
+
+            .landing-template-lead,
+            .landing-template-note {
+              max-width: none;
+            }
+
+            .landing-template-tags {
+              display: none;
+            }
+
+            .landing-template-cta-row {
+              display: grid;
+              gap: 10px;
+              max-width: none;
+            }
+
+            .landing-template-cta {
+              width: 100%;
+              min-width: 0;
+            }
+          }
+        `,
+      }}
+    />
+  );
+}
+
 export function ServicePageTemplate({
   service,
   relatedArticles,
@@ -786,39 +1237,34 @@ export function ServicePageTemplate({
   relatedArticles: ArticleEntry[];
 }) {
   const serviceVisual = getServiceVisual(service, true);
+  const heroTitle = getServiceHeroTitle(service);
 
   return (
     <>
-      <section className="section">
-        <div className="shell hero-grid">
-          <div className="stack">
-            <nav className="breadcrumbs" aria-label="Breadcrumb">
-              <Link href="/">Home</Link>
-              <span>/</span>
-              <Link href="/servizi">Servizi</Link>
-              <span>/</span>
-              <span>{service.shortTitle}</span>
-            </nav>
-            <p className="eyebrow">{service.shortTitle}</p>
-            <h1 className="display">{service.heroTitle}</h1>
-            <p className="lead">{service.heroIntro}</p>
-            <div className="cluster">
-              <TrackLink href="/contatti#modulo-contatti" label={`${service.slug}_hero_contact`}>
-                Richiedi una valutazione
-              </TrackLink>
-              <ContactActions scope={`${service.slug}_hero`} compact />
-            </div>
-          </div>
-          <EditorialFigure asset={serviceVisual} className="service-hero-visual" />
-        </div>
-      </section>
+      <LandingHero
+        eyebrow={service.shortTitle}
+        title={heroTitle}
+        intro={service.heroIntro}
+        microCases={service.problemList}
+        asset={serviceVisual}
+        scope={`service_${service.slug}_hero`}
+        breadcrumbs={
+          <>
+            <Link href="/">Home</Link>
+            <span>/</span>
+            <Link href="/servizi">Servizi</Link>
+            <span>/</span>
+            <span>{service.shortTitle}</span>
+          </>
+        }
+      />
 
       <section className="section-tight">
         <div className="shell two-column">
           <div className="card stack">
             <p className="eyebrow">Problema</p>
-            <h2>Quando questa materia diventa delicata</h2>
-            <p className="muted">{service.description}</p>
+            <h2 className="display-sm">Ti trovi in una di queste situazioni?</h2>
+            <p className="lead">{service.description}</p>
             <ul className="list">
               {service.problemList.map((item) => (
                 <TopicListItem
@@ -830,15 +1276,48 @@ export function ServicePageTemplate({
             </ul>
           </div>
           <div className="card stack">
-            <p className="eyebrow">Verifica legale</p>
-            <h2>Cosa controlla lo studio</h2>
-            <ul className="list">
+            <p className="eyebrow">Soluzione</p>
+            <h2 className="display-sm">Cosa va chiarito per impostare una soluzione efficace</h2>
+            <p className="muted">
+              Il punto decisivo non è solo capire se esiste un diritto, ma verificare
+              come provarlo, come misurarlo e quale percorso tutela davvero la tua
+              posizione.
+            </p>
+            <div className="info-list">
               {service.checks.map((item) => (
-                <TopicListItem
-                  key={item}
-                  item={item}
-                  label={`${service.slug}_check_${item}`}
-                />
+                <div key={item} className="info-item">
+                  <strong>{item}</strong>
+                </div>
+              ))}
+            </div>
+            <ul className="list">
+              {service.whenToCall.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section className="section-tight">
+        <div className="shell two-column">
+          <div className="card stack">
+            <p className="eyebrow">Errori</p>
+            <h2 className="display-sm">Errori frequenti che peggiorano il caso</h2>
+            <div className="info-list">
+              {service.errors.map((item) => (
+                <div key={item} className="info-item">
+                  <strong>{item}</strong>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="card stack">
+            <p className="eyebrow">Documenti</p>
+            <h2 className="display-sm">Documenti utili per impostare il lavoro</h2>
+            <ul className="list">
+              {service.documents.map((item) => (
+                <li key={item}>{item}</li>
               ))}
             </ul>
           </div>
@@ -849,33 +1328,63 @@ export function ServicePageTemplate({
         <div className="shell two-column">
           <div className="card stack">
             <p className="eyebrow">Metodo</p>
-            <h2 className="display-sm">Come interviene lo studio</h2>
+            <h2 className="display-sm">Come interviene lo Studio</h2>
             <div className="info-list">
-              <div className="info-item">
-                <strong>Analisi documentale</strong>
-                <p>Ricostruzione iniziale di quote, beni, atti e profili di rischio.</p>
-              </div>
-              <div className="info-item">
-                <strong>Valutazione strategica</strong>
-                <p>Scelta del percorso più adatto tra trattativa, mediazione e contenzioso.</p>
-              </div>
-              <div className="info-item">
-                <strong>Assistenza operativa</strong>
-                <p>Gestione dei rapporti con coeredi, professionisti, mediatori e autorità competenti.</p>
-              </div>
+              {workSteps.map((step) => (
+                <div key={step.title} className="info-item">
+                  <strong>{step.title}</strong>
+                  <p>{step.text}</p>
+                </div>
+              ))}
             </div>
           </div>
           <div className="card stack">
-            <p className="eyebrow">Affidabilità professionale</p>
+            <p className="eyebrow">Trust</p>
             <h2 className="display-sm">Assistenza concreta, fondata su prova e strategia</h2>
             <p className="lead">{service.trust}</p>
-            <TrackLink href="/contatti#modulo-contatti" label={`${service.slug}_mid_form`} className="button-primary">
-              Vai al modulo contatti
-            </TrackLink>
-            <ContactActions scope={`${service.slug}_mid`} compact />
+            <div className="meta-grid">
+              {getTrustCards("service", service.slug).map((item) => (
+                <div key={item} className="mini-card">
+                  <h3>{item}</h3>
+                </div>
+              ))}
+            </div>
+            <LandingActionButtons scope={`service_${service.slug}_mid`} />
           </div>
         </div>
       </section>
+
+      {service.relatedLinks && service.relatedLinks.length > 0 ? (
+        <section className="section-tight">
+          <div className="shell">
+            <div className="card stack">
+              <p className="eyebrow">Collegamenti utili</p>
+              <h2 className="display-sm">Pagine collegate da consultare in parallelo</h2>
+              <p className="muted">
+                Alcune questioni ereditarie si intrecciano con divisione, donazioni,
+                somme bancarie o gestione di beni specifici. Qui trovi i passaggi più
+                utili da approfondire.
+              </p>
+              <div className="cards-grid">
+                {service.relatedLinks.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="card clickable-card"
+                    data-track-event="cta_click"
+                    data-track-label={`${service.slug}_related_${item.href}`}
+                  >
+                    <h3>{item.label}</h3>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      ) : null}
+      {specialInheritanceClusterSlugs.has(service.slug) ? (
+        <SpecialInheritanceAssetsSection currentHref={`/${service.slug}`} />
+      ) : null}
 
       <FaqSection title={`Domande frequenti su ${service.shortTitle.toLowerCase()}`} items={service.faq} />
       {relatedArticles.length > 0 ? (
@@ -885,8 +1394,43 @@ export function ServicePageTemplate({
           title="Contenuti utili collegati a questa materia"
         />
       ) : null}
+      <section className="section-tight">
+        <div className="shell panel">
+          <div className="panel-inner two-column">
+            <div className="stack">
+              <p className="eyebrow">Contatto</p>
+              <h2 className="display-sm">Hai bisogno di un primo inquadramento?</h2>
+              <p className="lead">
+                Un confronto tempestivo aiuta a evitare errori, accordi sfavorevoli e
+                iniziative inefficaci.
+              </p>
+            </div>
+            <div className="stack">
+              <div className="landing-template-cta-row landing-template-cta-row-final">
+                <TrackLink
+                  href="/contatti#modulo-contatti"
+                  label={`${service.slug}_final_contact`}
+                  className="button-primary landing-template-cta"
+                >
+                  Contatta lo Studio
+                </TrackLink>
+                <Link
+                  href={contacts.whatsappHref}
+                  className="button-whatsapp landing-template-cta"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-track-event="whatsapp_click"
+                  data-track-label={`${service.slug}_final_whatsapp`}
+                >
+                  Scrivi su WhatsApp
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
       <ContactSection
-        title={`Parla con un avvocato per ${service.shortTitle.toLowerCase()}`}
+        title={`Parla con lo Studio per ${service.shortTitle.toLowerCase()}`}
         intro="Se desideri una valutazione del caso o hai già documenti da far esaminare, puoi usare il form oppure i contatti diretti dello studio."
       />
     </>
@@ -1086,6 +1630,51 @@ export function ArticlePageTemplate({
   );
 }
 
+function getGlossaryLinkData(slug: string) {
+  const service = getService(slug);
+
+  if (service) {
+    const serviceLabels: Record<string, string> = {
+      "lesione-di-legittima": "Leggi sulla quota di legittima",
+      "divisione-ereditaria": "Vai alla divisione ereditaria",
+      "collazione-e-donazioni": "Approfondisci la collazione",
+      "rinuncia-eredita": "Vai alla rinuncia all’eredità",
+      "eredita-giacente": "Leggi sull’eredità giacente",
+      "impugnazione-testamento": "Leggi sull’impugnazione del testamento",
+      "successioni-internazionali": "Leggi sulle successioni internazionali",
+      "mediazione-ereditaria": "Leggi sulla mediazione ereditaria",
+      "recupero-somme-ereditarie": "Leggi sul recupero delle somme ereditarie",
+      "avvocato-successioni": "Vai all’avvocato per successioni",
+    };
+
+    return {
+      href: `/${service.slug}`,
+      label:
+        serviceLabels[service.slug] ?? `Approfondisci: ${service.shortTitle}`,
+    };
+  }
+
+  const article = getArticle(slug);
+
+  if (article) {
+    return {
+      href: `/approfondimenti/${article.slug}`,
+      label: `Approfondisci: ${article.title}`,
+    };
+  }
+
+  const hub = getHub(slug);
+
+  if (hub) {
+    return {
+      href: `/hub/${hub.slug}`,
+      label: `Vai a ${hub.title}`,
+    };
+  }
+
+  return null;
+}
+
 export function GlossaryGrid({ terms }: { terms: GlossaryTerm[] }) {
   return (
     <section className="section">
@@ -1106,22 +1695,24 @@ export function GlossaryGrid({ terms }: { terms: GlossaryTerm[] }) {
               <p className="muted">
                 <strong>Perché conta:</strong> {term.whyItMatters}
               </p>
-              <div className="cluster">
-                {term.relatedSlugs.map((slug) => {
-                  const service = moneyPages.find((page) => page.slug === slug);
-                  const href = service ? `/${slug}` : `/approfondimenti/${slug}`;
-
-                  return (
+              <div className="cluster glossary-links">
+                {term.relatedSlugs
+                  .map((slug) => ({ slug, data: getGlossaryLinkData(slug) }))
+                  .filter(
+                    (item): item is { slug: string; data: NonNullable<ReturnType<typeof getGlossaryLinkData>> } =>
+                      Boolean(item.data),
+                  )
+                  .slice(0, 2)
+                  .map(({ slug, data }) => (
                     <TrackLink
                       key={slug}
-                      href={href}
+                      href={data.href}
                       label={`glossary_${term.slug}_${slug}`}
-                      className="button-ghost"
+                      className="button-ghost glossary-link-button"
                     >
-                      Approfondisci
+                      {data.label}
                     </TrackLink>
-                  );
-                })}
+                  ))}
               </div>
             </div>
           ))}

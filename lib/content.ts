@@ -53,6 +53,8 @@ export type ServicePage = {
   title: string;
   shortTitle: string;
   description: string;
+  seoTitle?: string;
+  seoDescription?: string;
   heroTitle: string;
   heroIntro: string;
   problemList: string[];
@@ -62,6 +64,7 @@ export type ServicePage = {
   documents: string[];
   trust: string;
   relatedArticles: string[];
+  relatedLinks?: { href: string; label: string }[];
   faq: FaqItem[];
 };
 
@@ -137,9 +140,9 @@ export const moneyPages: ServicePage[] = [
     shortTitle: "Avvocato successioni",
     description:
       "Assistenza legale in materia di successioni, testamenti, divisioni ereditarie, legittima, conti correnti, immobili e conflitti tra coeredi.",
-    heroTitle: "Avvocato per successioni, eredità e contenziosi ereditari",
+    heroTitle: "Hai bisogno di assistenza per una successione complessa?",
     heroIntro:
-      "Assistiamo clienti e famiglie nei passaggi più delicati della successione: apertura della pratica, verifica delle quote, gestione dei conflitti, impugnazioni, divisioni e patrimoni complessi.",
+      "Eredità bloccata, dubbi sulle quote o conflitti tra coeredi richiedono una lettura tecnica immediata. Lo Studio aiuta a chiarire diritti, rischi e percorso più efficace.",
     problemList: [
       "Eredità con più coeredi e interessi divergenti",
       "Dubbi su validità del testamento o ricostruzione delle quote",
@@ -201,9 +204,9 @@ export const moneyPages: ServicePage[] = [
     shortTitle: "Impugnazione testamento",
     description:
       "Valutazione della validità del testamento, vizi formali, incapacità, pressione indebita, lesione di legittima e strategia per impugnare.",
-    heroTitle: "Impugnazione del testamento: quando è fondata e come si prepara",
+    heroTitle: "Vuoi contestare un testamento?",
     heroIntro:
-      "Non tutti i testamenti contestati sono davvero impugnabili. Il punto decisivo è capire se esistono vizi concreti, prove utilizzabili e un interesse giuridico attuale.",
+      "Testamento sospetto, incapacità del testatore, pressioni o lesione di legittima non si valutano a intuito. Occorre capire subito se esistono motivi fondati e prove utilizzabili.",
     problemList: [
       "Testamento olografo con dubbi su autenticità, data o sottoscrizione",
       "Sospetti di condizionamento, captazione o incapacità del testatore",
@@ -265,9 +268,9 @@ export const moneyPages: ServicePage[] = [
     shortTitle: "Divisione ereditaria",
     description:
       "Assistenza nella divisione ereditaria: immobili, denaro, quote, beni mobili, gioielli, conflitti tra coeredi e scioglimento della comunione ereditaria.",
-    heroTitle: "Divisione ereditaria: come uscire dalla comunione senza errori",
+    heroTitle: "La divisione ereditaria è bloccata?",
     heroIntro:
-      "Quando l’eredità resta indivisa, il conflitto si trascina su immobili, denaro, spese, utilizzo dei beni e decisioni bloccate. La divisione ereditaria serve a trasformare quote astratte in attribuzioni concrete e difendibili.",
+      "Quando immobili, denaro o beni mobili restano in comunione, il conflitto tra coeredi tende a peggiorare. Serve una strategia chiara per trasformare quote astratte in attribuzioni concrete.",
     problemList: [
       "Immobili cointestati che nessuno riesce a vendere o gestire",
       "Beni mobili, gioielli, arredi o somme di denaro contesi",
@@ -329,9 +332,9 @@ export const moneyPages: ServicePage[] = [
     shortTitle: "Lesione di legittima",
     description:
       "Verifica della quota di legittima, riduzione delle disposizioni lesive, calcolo della massa ereditaria e tutela dei legittimari.",
-    heroTitle: "Lesione di legittima: verifica quote, donazioni e azioni di riduzione",
+    heroTitle: "La tua quota di legittima è stata lesa?",
     heroIntro:
-      "Quando le disposizioni del defunto comprimono la quota riservata ai legittimari, occorre ricostruire il patrimonio, calcolare la massa e valutare l’azione più efficace.",
+      "Testamento squilibrato, donazioni fatte in vita o esclusione di un erede possono comprimere la quota riservata ai legittimari. Il punto è verificare calcoli, massa e rimedi praticabili.",
     problemList: [
       "Quote apparentemente sbilanciate a favore di un solo erede o terzo",
       "Donazioni pregresse che incidono sulla quota riservata",
@@ -387,9 +390,9 @@ export const moneyPages: ServicePage[] = [
     shortTitle: "Collazione e donazioni",
     description:
       "Analisi di donazioni, anticipazioni, liberalità indirette e collazione nell’ambito della successione e delle quote ereditarie.",
-    heroTitle: "Collazione e donazioni: cosa rientra davvero nella successione",
+    heroTitle: "Donazioni fatte in vita alterano l’eredità?",
     heroIntro:
-      "Le donazioni fatte in vita possono cambiare radicalmente quote, equilibri e contenzioso tra coeredi. Serve capire cosa va conferito, cosa incide sulla legittima e come provarlo.",
+      "Immobili donati, somme ricevute o liberalità indirette possono alterare quote ed equilibri tra fratelli e coeredi. Occorre capire cosa rileva davvero e come provarlo.",
     problemList: [
       "Donazioni immobiliari o somme di denaro fatte a uno solo degli eredi",
       "Pagamenti indiretti o intestazioni a favore di terzi",
@@ -435,14 +438,447 @@ export const moneyPages: ServicePage[] = [
     ],
   },
   {
+    slug: "animali-domestici-eredita",
+    title: "Animali domestici in eredità",
+    shortTitle: "Animali in eredità",
+    description:
+      "Assistenza legale su accordi tra eredi, spese, custodia e tutela dell’animale dopo la morte del proprietario.",
+    seoTitle:
+      "Animali domestici in eredità: a chi va il cane dopo la successione",
+    seoDescription:
+      "Cosa succede agli animali domestici dopo la morte del proprietario. Assistenza legale su accordi tra eredi, spese, custodia e tutela dell’animale.",
+    heroTitle: "A chi va il cane o l’animale domestico nell’eredità?",
+    heroIntro:
+      "Dopo la morte del proprietario, anche un animale domestico può diventare motivo di conflitto tra gli eredi. Lo Studio assiste nella gestione degli accordi, delle spese, della custodia e delle decisioni pratiche più urgenti.",
+    problemList: [
+      "Un erede vuole tenere il cane o l’animale senza accordo",
+      "I coeredi non concordano su custodia e spese",
+      "L’animale viveva con il defunto e nessuno sa chi debba occuparsene",
+      "Esistono volontà scritte, ma non è chiaro come applicarle",
+      "Ci sono spese veterinarie o di mantenimento da ripartire",
+    ],
+    whenToCall: [
+      "Quando gli eredi litigano sull’affidamento dell’animale",
+      "Quando bisogna regolare spese e responsabilità",
+      "Quando l’animale è collegato a un immobile o a una situazione familiare complessa",
+      "Quando serve un accordo scritto tra coeredi",
+    ],
+    checks: [
+      "Presenza di disposizioni testamentarie o volontà del defunto",
+      "Chi detiene concretamente l’animale",
+      "Spese già sostenute e spese future",
+      "Possibile accordo tra eredi",
+      "Collegamento con altri beni ereditari",
+    ],
+    errors: [
+      "Trattare l’animale come un oggetto qualsiasi",
+      "Lasciare la gestione solo a decisioni verbali",
+      "Non documentare spese e accordi",
+      "Agire senza considerare l’interesse pratico dell’animale",
+    ],
+    documents: [
+      "Testamento o scritti del defunto",
+      "Documenti veterinari",
+      "Microchip e iscrizione all’anagrafe animale",
+      "Ricevute di spese veterinarie e di mantenimento",
+      "Comunicazioni tra eredi",
+    ],
+    trust:
+      "Quando nell’eredità entra anche la gestione di un animale domestico, servono buon senso giuridico, attenzione pratica e accordi chiari che evitino conflitti inutili.",
+    relatedArticles: [
+      "mediazione-ereditaria-quando-conviene",
+      "divisione-gioielli-eredita",
+    ],
+    relatedLinks: [
+      { href: "/divisione-ereditaria", label: "Vai alla divisione ereditaria" },
+      { href: "/mediazione-ereditaria", label: "Approfondisci la mediazione ereditaria" },
+      { href: "/casa-ereditata", label: "Leggi sulla casa ereditata" },
+      { href: "/divisione-gioielli-eredita", label: "Vai a gioielli e beni di famiglia" },
+    ],
+    faq: [
+      {
+        question: "Il cane entra nell’eredità?",
+        answer:
+          "L’animale non si gestisce come un bene qualsiasi, ma la sua sorte può comunque rientrare nelle decisioni pratiche e patrimoniali da coordinare tra gli eredi.",
+      },
+      {
+        question: "Un erede può tenerlo senza accordo?",
+        answer:
+          "Non dovrebbe farlo in modo unilaterale se la situazione è contestata. Occorre verificare chi lo accudiva, quali volontà esistevano e come regolare custodia e spese.",
+      },
+      {
+        question: "Chi paga le spese veterinarie?",
+        answer:
+          "Dipende dagli accordi, dalla gestione concreta dell’animale e dalle spese già sostenute. In caso di conflitto è utile documentare ogni esborso.",
+      },
+      {
+        question: "Si può stabilire per accordo chi si occupa dell’animale?",
+        answer:
+          "Sì. Un accordo scritto tra coeredi può chiarire affidamento, spese, visite e responsabilità pratiche.",
+      },
+      {
+        question: "Il defunto può indicare chi dovrà prendersene cura?",
+        answer:
+          "Può lasciare indicazioni utili, che vanno poi lette e applicate correttamente nel contesto concreto della successione.",
+      },
+    ],
+  },
+  {
+    slug: "auto-ereditata",
+    title: "Auto ereditata",
+    shortTitle: "Auto ereditata",
+    description:
+      "Assistenza su voltura, uso del veicolo, vendita, assegnazione a un erede e accordi tra coeredi in caso di auto caduta in successione.",
+    seoTitle:
+      "Auto ereditata: chi la prende, voltura, uso e divisione tra eredi",
+    seoDescription:
+      "Come gestire un’auto caduta in successione: uso del veicolo, voltura, vendita, assegnazione a un erede e accordi tra coeredi.",
+    heroTitle: "A chi va la macchina ereditata?",
+    heroIntro:
+      "L’auto caduta in successione può creare problemi pratici immediati: uso del veicolo, voltura, assicurazione, vendita o assegnazione a uno degli eredi. Lo Studio assiste nella gestione corretta dei passaggi e degli accordi tra coeredi.",
+    problemList: [
+      "Un erede utilizza l’auto senza accordo",
+      "Non è chiaro chi debba fare la voltura",
+      "Il veicolo deve essere venduto, ma manca il consenso",
+      "Ci sono bollo, assicurazione o spese da pagare",
+      "L’auto ha valore economico o affettivo rilevante",
+    ],
+    whenToCall: [
+      "Quando gli eredi non concordano su vendita o assegnazione",
+      "Quando un erede usa il mezzo senza rendere conto agli altri",
+      "Quando bisogna coordinare PRA, documenti e successione",
+      "Quando il veicolo rientra in una divisione ereditaria più ampia",
+    ],
+    checks: [
+      "Intestazione del veicolo",
+      "Stato della successione",
+      "Possibilità di vendita o assegnazione",
+      "Valore del mezzo",
+      "Spese, bollo, assicurazione e responsabilità",
+    ],
+    errors: [
+      "Usare l’auto senza accordo tra coeredi",
+      "Rinviare voltura o vendita",
+      "Non considerare spese e responsabilità",
+      "Sottovalutare il valore del bene nella divisione",
+    ],
+    documents: [
+      "Libretto di circolazione",
+      "Certificato di proprietà e documenti PRA",
+      "Certificato di morte",
+      "Dichiarazione di successione, se disponibile",
+      "Polizza assicurativa e ricevute delle spese",
+    ],
+    trust:
+      "Su veicoli e beni mobili registrati conta muoversi presto, con documenti corretti e un accordo chiaro tra coeredi per evitare uso improprio e responsabilità inutili.",
+    relatedArticles: [
+      "conti-correnti-del-de-cuius-cosa-sapere",
+      "mediazione-ereditaria-quando-conviene",
+    ],
+    relatedLinks: [
+      { href: "/divisione-ereditaria", label: "Vai alla divisione ereditaria" },
+      { href: "/casa-ereditata", label: "Leggi sulla casa ereditata" },
+      { href: "/conti-correnti-azioni-polizze-eredita", label: "Leggi su conti correnti e polizze" },
+      { href: "/divisione-gioielli-eredita", label: "Vai a gioielli e beni di famiglia" },
+    ],
+    faq: [
+      {
+        question: "Chi può usare l’auto ereditata?",
+        answer:
+          "L’uso del veicolo non dovrebbe essere deciso unilateralmente quando il bene cade in comunione ereditaria. Occorre verificare accordi, titolarità e responsabilità.",
+      },
+      {
+        question: "Serve il consenso di tutti gli eredi per venderla?",
+        answer:
+          "Nella pratica il consenso o un percorso condiviso è normalmente decisivo, salvo diverse soluzioni giuridiche da valutare sul caso concreto.",
+      },
+      {
+        question: "Come si fa la voltura?",
+        answer:
+          "La voltura richiede coordinamento tra documenti del veicolo, pratica successoria e passaggi presso gli uffici competenti.",
+      },
+      {
+        question: "L’auto va stimata nella divisione?",
+        answer:
+          "Sì, se il suo valore incide sull’equilibrio delle quote o sull’assegnazione a uno degli eredi.",
+      },
+      {
+        question: "Cosa succede se un erede la usa da solo?",
+        answer:
+          "Può sorgere un problema di utilizzo esclusivo, spese e rendiconto da valutare insieme al resto della divisione ereditaria.",
+      },
+    ],
+  },
+  {
+    slug: "casa-ereditata",
+    title: "Casa ereditata",
+    shortTitle: "Casa ereditata",
+    description:
+      "Assistenza su comunione ereditaria, vendita, assegnazione, conguagli, uso dell’immobile e conflitti tra eredi.",
+    seoTitle:
+      "Casa ereditata: divisione, vendita o assegnazione tra eredi",
+    seoDescription:
+      "Cosa fare quando una casa cade in successione: comunione ereditaria, vendita, assegnazione, conguagli, uso dell’immobile e conflitti tra eredi.",
+    heroTitle: "Come si divide una casa ereditata?",
+    heroIntro:
+      "Quando una casa cade in successione, gli eredi possono trovarsi in comunione su un bene difficile da gestire: vendita, assegnazione, uso esclusivo, conguagli e spese devono essere regolati con precisione.",
+    problemList: [
+      "Un erede vive nell’immobile senza accordo",
+      "Alcuni vogliono vendere e altri no",
+      "Non si riesce a stabilire il valore della casa",
+      "Ci sono spese condominiali, mutuo o lavori da pagare",
+      "L’immobile è indiviso da anni",
+    ],
+    whenToCall: [
+      "Quando la casa ereditaria è bloccata",
+      "Quando serve decidere tra vendita, divisione o assegnazione",
+      "Quando un coerede usa l’immobile in via esclusiva",
+      "Quando occorre impostare mediazione o divisione giudiziale",
+    ],
+    checks: [
+      "Titoli di proprietà e quote",
+      "Valore dell’immobile",
+      "Eventuali ipoteche, mutui o pesi",
+      "Uso attuale del bene",
+      "Possibili accordi o conguagli",
+    ],
+    errors: [
+      "Lasciare l’immobile indiviso senza regole",
+      "Non regolare uso esclusivo e spese",
+      "Vendere senza valutare bene quote e conguagli",
+      "Arrivare alla causa senza documenti immobiliari completi",
+    ],
+    documents: [
+      "Visura catastale",
+      "Ispezione ipotecaria",
+      "Atto di provenienza",
+      "Dichiarazione di successione",
+      "Documenti su mutui, spese, lavori e locazioni",
+    ],
+    trust:
+      "La casa ereditaria è spesso il bene che concentra più tensioni: uso esclusivo, valore, spese e vendita richiedono una regia tecnica solida per evitare contenziosi lunghi.",
+    relatedArticles: [
+      "mediazione-ereditaria-quando-conviene",
+      "divisione-gioielli-eredita",
+      "successione-legittima-con-coniuge-e-figli",
+    ],
+    relatedLinks: [
+      { href: "/divisione-ereditaria", label: "Vai alla divisione ereditaria" },
+      { href: "/affitti-immobili-ereditati", label: "Leggi sugli affitti degli immobili ereditati" },
+      { href: "/lesione-di-legittima", label: "Approfondisci la quota di legittima" },
+      { href: "/mediazione-ereditaria", label: "Leggi sulla mediazione ereditaria" },
+    ],
+    faq: [
+      {
+        question: "Se uno degli eredi vive nella casa deve pagare qualcosa agli altri?",
+        answer:
+          "Può sorgere un tema di utilizzo esclusivo e compensazione economica, da valutare insieme a spese, tempi e modalità di occupazione.",
+      },
+      {
+        question: "Si può vendere senza il consenso di tutti?",
+        answer:
+          "La vendita del bene ereditario richiede una valutazione attenta della situazione giuridica e del grado di accordo tra i coeredi.",
+      },
+      {
+        question: "Come si determina il valore dell’immobile?",
+        answer:
+          "Il valore si determina normalmente con criteri tecnici coerenti con la finalità della divisione o dell’assegnazione.",
+      },
+      {
+        question: "Cosa succede se la divisione bonaria non riesce?",
+        answer:
+          "Si può rendere necessario un percorso di mediazione o una divisione giudiziale, purché il caso sia stato preparato correttamente.",
+      },
+      {
+        question: "Si può assegnare la casa a un solo erede?",
+        answer:
+          "Sì, in presenza dei presupposti giusti e con conguagli adeguati verso gli altri coeredi.",
+      },
+    ],
+  },
+  {
+    slug: "affitti-immobili-ereditati",
+    title: "Affitti di immobili ereditati",
+    shortTitle: "Affitti immobili ereditati",
+    description:
+      "Assistenza sulla ripartizione dei canoni, rendiconti, incassi non dichiarati e conflitti tra coeredi su immobili locati caduti in successione.",
+    seoTitle:
+      "Affitti di immobili ereditati: come si dividono tra gli eredi",
+    seoDescription:
+      "Ripartizione dei canoni di locazione degli immobili ereditati: quote tra coeredi, rendiconti, incassi non dichiarati e conflitti sulla gestione.",
+    heroTitle: "Come si dividono gli affitti di un immobile ereditato?",
+    heroIntro:
+      "Se un immobile ereditato è locato, i canoni di affitto devono essere ripartiti correttamente tra gli eredi. I problemi nascono quando uno solo incassa, non rende conto o gestisce il contratto senza accordo.",
+    problemList: [
+      "Un erede incassa gli affitti senza dividerli",
+      "Non esiste un rendiconto chiaro dei canoni",
+      "Il contratto di locazione è gestito da un solo coerede",
+      "Ci sono spese sull’immobile da compensare",
+      "I coeredi litigano su rinnovo, disdetta o vendita",
+    ],
+    whenToCall: [
+      "Quando i canoni non vengono ripartiti",
+      "Quando serve chiedere rendiconto a un coerede",
+      "Quando l’immobile locato deve essere venduto o diviso",
+      "Quando ci sono spese da imputare correttamente",
+    ],
+    checks: [
+      "Contratto di locazione",
+      "Quote ereditarie",
+      "Canoni incassati",
+      "Spese sostenute",
+      "Gestione del rapporto con l’inquilino",
+    ],
+    errors: [
+      "Lasciare incassi e spese senza rendiconto",
+      "Non distinguere canoni, depositi e spese",
+      "Non formalizzare accordi tra coeredi",
+      "Agire sull’inquilino senza coordinamento tra eredi",
+    ],
+    documents: [
+      "Contratto di locazione",
+      "Estratti conto degli incassi",
+      "Ricevute dei canoni",
+      "Spese condominiali e fiscali",
+      "Comunicazioni con l’inquilino",
+    ],
+    trust:
+      "Quando un immobile ereditato produce reddito, la gestione dei canoni deve essere tracciata con precisione per evitare che il conflitto sugli incassi si estenda a tutta la successione.",
+    relatedArticles: [
+      "mediazione-ereditaria-quando-conviene",
+      "conti-correnti-del-de-cuius-cosa-sapere",
+    ],
+    relatedLinks: [
+      { href: "/casa-ereditata", label: "Vai alla casa ereditata" },
+      { href: "/divisione-ereditaria", label: "Approfondisci la divisione ereditaria" },
+      { href: "/recupero-somme-ereditarie", label: "Leggi sul recupero delle somme ereditarie" },
+      { href: "/mediazione-ereditaria", label: "Leggi sulla mediazione ereditaria" },
+    ],
+    faq: [
+      {
+        question: "Gli affitti spettano a tutti gli eredi?",
+        answer:
+          "In linea generale i canoni seguono le quote ereditarie, ma la verifica concreta richiede di considerare incassi, spese e gestione effettiva del rapporto locativo.",
+      },
+      {
+        question: "Cosa fare se un coerede incassa tutto?",
+        answer:
+          "Può essere necessario chiedere rendiconto e ricostruire somme incassate, spese trattenute e quote spettanti agli altri coeredi.",
+      },
+      {
+        question: "Le spese si possono detrarre dagli affitti?",
+        answer:
+          "Dipende dal tipo di spesa e da come va imputata nel rapporto tra coeredi. Serve una ricostruzione chiara.",
+      },
+      {
+        question: "Chi decide se rinnovare o disdire il contratto?",
+        answer:
+          "La decisione va coordinata con la posizione dei coeredi e con la gestione complessiva dell’immobile ereditato.",
+      },
+      {
+        question: "Serve un rendiconto tra coeredi?",
+        answer:
+          "Sì, soprattutto quando uno solo incassa o gestisce il rapporto con l’inquilino.",
+      },
+    ],
+  },
+  {
+    slug: "conti-correnti-azioni-polizze-eredita",
+    title: "Conti correnti, azioni e polizze in eredità",
+    shortTitle: "Conti correnti e polizze",
+    description:
+      "Assistenza legale su conti correnti del defunto, somme ereditarie, titoli, azioni, investimenti e polizze assicurative nella successione.",
+    seoTitle:
+      "Conti correnti, azioni e polizze in eredità: come si dividono",
+    seoDescription:
+      "Assistenza legale su conti correnti del defunto, somme ereditarie, titoli, azioni, investimenti e polizze assicurative nella successione.",
+    heroTitle: "Come si dividono conti correnti, azioni e polizze nell’eredità?",
+    heroIntro:
+      "Conti correnti, somme, titoli, azioni e polizze possono essere tra i beni più delicati della successione. Occorre ricostruire saldo, movimenti, beneficiari, eventuali prelievi e diritti degli eredi.",
+    problemList: [
+      "La banca non sblocca le somme",
+      "Un erede ha prelevato denaro prima o dopo la morte",
+      "Non sono chiari titoli, azioni o investimenti",
+      "Ci sono polizze con beneficiari da verificare",
+      "Mancano estratti conto o documenti bancari",
+    ],
+    whenToCall: [
+      "Quando servono dati bancari completi",
+      "Quando emergono prelievi sospetti",
+      "Quando bisogna dividere somme o strumenti finanziari",
+      "Quando polizze o investimenti non sono chiari",
+    ],
+    checks: [
+      "Saldo alla data del decesso",
+      "Movimenti anteriori e successivi",
+      "Cointestazioni e deleghe",
+      "Titoli, fondi, azioni e dossier",
+      "Polizze vita e beneficiari",
+    ],
+    errors: [
+      "Firmare quietanze senza aver visto i movimenti",
+      "Fermarsi al saldo finale senza controllare i prelievi",
+      "Confondere conto cointestato e proprietà effettiva delle somme",
+      "Ignorare polizze, dossier titoli e investimenti",
+    ],
+    documents: [
+      "Estratti conto",
+      "Certificazione dei saldi alla data del decesso",
+      "Documentazione titoli e dossier",
+      "Polizze assicurative",
+      "Comunicazioni bancarie",
+      "Dichiarazione di successione",
+    ],
+    trust:
+      "Su conti, investimenti e polizze la differenza la fanno cronologia dei movimenti, titolarità effettiva e coordinamento tra banca, successione e diritti degli eredi.",
+    relatedArticles: [
+      "conti-correnti-del-de-cuius-cosa-sapere",
+      "quota-di-legittima-come-si-calcola",
+      "mediazione-ereditaria-quando-conviene",
+    ],
+    relatedLinks: [
+      { href: "/recupero-somme-ereditarie", label: "Vai al recupero delle somme ereditarie" },
+      { href: "/collazione-e-donazioni", label: "Approfondisci collazione e donazioni" },
+      { href: "/lesione-di-legittima", label: "Leggi sulla quota di legittima" },
+      { href: "/divisione-ereditaria", label: "Vai alla divisione ereditaria" },
+    ],
+    faq: [
+      {
+        question: "Come si dividono i soldi sul conto corrente?",
+        answer:
+          "Occorre partire da saldo, movimenti, eventuali cointestazioni e posizione successoria degli eredi. Non basta guardare il dato finale comunicato dalla banca.",
+      },
+      {
+        question: "Gli eredi possono chiedere gli estratti conto?",
+        answer:
+          "Sì, nei limiti e con i presupposti corretti. Spesso la ricostruzione documentale è il primo passo indispensabile.",
+      },
+      {
+        question: "Cosa succede se un erede ha prelevato denaro?",
+        answer:
+          "Va verificato quando, con quale titolo e con quale incidenza sulla successione o sulla divisione delle somme.",
+      },
+      {
+        question: "Le polizze vita fanno parte dell’eredità?",
+        answer:
+          "Non sempre nello stesso modo dei beni ereditari ordinari. La verifica dipende da tipo di polizza, beneficiari e funzione concreta del rapporto.",
+      },
+      {
+        question: "Come si dividono azioni, fondi e titoli?",
+        answer:
+          "Serve ricostruire dossier, valori, intestazioni e possibilità di liquidazione o assegnazione tra coeredi.",
+      },
+    ],
+  },
+  {
     slug: "successioni-internazionali",
     title: "Successioni internazionali",
     shortTitle: "Successioni internazionali",
     description:
       "Assistenza in successioni con elementi esteri: residenza, beni in più Paesi, legge applicabile, regolamento europeo e coordinamento documentale.",
-    heroTitle: "Successioni internazionali: legge applicabile, beni esteri e coordinamento",
+    heroTitle: "Ci sono beni o eredi all’estero?",
     heroIntro:
-      "Quando il patrimonio, i familiari o la residenza toccano più ordinamenti, la successione richiede una regia tecnica precisa su legge applicabile, giurisdizione e circolazione dei documenti.",
+      "Immobili esteri, conti fuori dall’Italia, residenza abituale all’estero o documenti stranieri cambiano il quadro della successione. Serve coordinare legge applicabile, foro e documentazione.",
     problemList: [
       "Defunto residente all’estero o con beni in più Stati",
       "Conflitti sulla legge applicabile alla successione",
@@ -493,9 +929,9 @@ export const moneyPages: ServicePage[] = [
     shortTitle: "Mediazione ereditaria",
     description:
       "Preparazione tecnica della mediazione in materia ereditaria, divisioni, legittima, impugnazioni e conflitti tra coeredi.",
-    heroTitle: "Mediazione ereditaria: quando conviene e come prepararla bene",
+    heroTitle: "Vuoi evitare una causa tra eredi?",
     heroIntro:
-      "La mediazione è utile solo se arriva con numeri, documenti e opzioni reali sul tavolo. Senza preparazione, diventa un passaggio formale che non risolve nulla.",
+      "La mediazione ereditaria funziona solo se arriva con patrimonio ricostruito, valori attendibili e opzioni concrete. Senza preparazione, rischia di essere solo un rinvio.",
     problemList: [
       "Mediazione obbligatoria in vista di una causa ereditaria",
       "Coeredi già conflittuali e diffidenza reciproca",
@@ -546,9 +982,9 @@ export const moneyPages: ServicePage[] = [
     shortTitle: "Eredità giacente",
     description:
       "Assistenza su eredità giacente, nomina del curatore, amministrazione dell’asse e gestione dei beni in assenza di accettazione.",
-    heroTitle: "Eredità giacente: gestione dei beni quando l’eredità non viene accettata",
+    heroTitle: "L’eredità è senza gestione o senza eredi certi?",
     heroIntro:
-      "Quando nessuno accetta l’eredità o la situazione è bloccata, l’eredità giacente consente di amministrare e proteggere il patrimonio secondo regole specifiche.",
+      "Quando nessuno accetta l’eredità o la situazione resta ferma, beni e passività richiedono una gestione tecnica prudente. Occorre capire subito se vi sono i presupposti della giacenza.",
     problemList: [
       "Eredi incerti, inattivi o indecisi",
       "Beni da conservare o amministrare con urgenza",
@@ -599,9 +1035,9 @@ export const moneyPages: ServicePage[] = [
     shortTitle: "Rinuncia eredità",
     description:
       "Valutazione di rinuncia, accettazione espressa o tacita, benefici d’inventario, debiti ereditari e rischi operativi prima della scelta.",
-    heroTitle: "Rinuncia all’eredità: quando conviene e quali rischi evitare",
+    heroTitle: "Conviene rinunciare all’eredità?",
     heroIntro:
-      "La rinuncia non è una formalità neutra. Va valutata insieme a debiti, beni, possibili atti di accettazione tacita e alternative come il beneficio d’inventario.",
+      "Debiti, atti già compiuti, beneficio d’inventario e posizione degli altri chiamati incidono sulla scelta. La rinuncia va valutata con attenzione prima di assumere decisioni irreversibili.",
     problemList: [
       "Timore di ereditare debiti o passività occulte",
       "Incertezza su atti già compiuti che potrebbero valere come accettazione",
@@ -652,9 +1088,9 @@ export const moneyPages: ServicePage[] = [
     shortTitle: "Recupero somme ereditarie",
     description:
       "Recupero di somme del de cuius, verifica di conti correnti, prelievi, investimenti, polizze e tracciamento di disponibilità patrimoniali.",
-    heroTitle: "Recupero di somme ereditarie, conti correnti e disponibilità del de cuius",
+    heroTitle: "Devi recuperare somme ereditarie o conti del defunto?",
     heroIntro:
-      "Le somme bancarie sono spesso il punto più sensibile della successione: conti bloccati, prelievi sospetti, cointestazioni, deleghe e movimenti da ricostruire richiedono metodo probatorio.",
+      "Conti bloccati, prelievi sospetti, cointestazioni e investimenti non chiari richiedono una ricostruzione rigorosa. Il punto è capire chi aveva disponibilità delle somme e come recuperarle.",
     problemList: [
       "Conti correnti bloccati o non pienamente conosciuti",
       "Prelievi sospetti prima del decesso",
@@ -2100,10 +2536,20 @@ export const primaryNav = [
 export const navigationGroups = [
   {
     label: "Servizi",
-    items: moneyPages.slice(0, 6).map((page) => ({
-      href: `/${page.slug}`,
-      label: page.shortTitle,
-    })),
+    items: [
+      "avvocato-successioni",
+      "impugnazione-testamento",
+      "divisione-ereditaria",
+      "lesione-di-legittima",
+      "casa-ereditata",
+      "conti-correnti-azioni-polizze-eredita",
+    ]
+      .map((slug) => getService(slug))
+      .filter((page): page is ServicePage => Boolean(page))
+      .map((page) => ({
+        href: `/${page.slug}`,
+        label: page.shortTitle,
+      })),
   },
   {
     label: "Aree",

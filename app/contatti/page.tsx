@@ -78,6 +78,7 @@ export default function ContactsPage() {
           </div>
         </div>
       </section>
+      <ContactSection />
       <section className="section-tight">
         <div className="shell meta-grid">
           <div className="mini-card">
@@ -95,7 +96,6 @@ export default function ContactsPage() {
         </div>
       </section>
       <FaqSection title="Domande frequenti sui contatti dello studio" items={contactPageFaqs} />
-      <ContactSection />
     </>
   );
 }
